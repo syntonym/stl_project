@@ -1,29 +1,5 @@
 #!/bin/bash
 
-WORKING_DIR=$(pwd)
-
-if [ -z ${BUILD_DIR+x} ];
-then
-	BUILD_DIR=_build
-fi
-
-if [ -z ${INSTALL_PREFIX+x} ]; 
-then 
-	echo "Please provide and install prefix in the env INSTALL_PREFIX"
-	echo "INSTALL_PREFIX is unset, aborting installation..."
-	exit 1
-fi
-
-if [ ! -d $BUILD_DIR ]
-then
-	mkdir $BUILD_DIR
-	__build_dir_created=yes
-fi
-
-cd $BUILD_DIR
-mkdir $INSTALL_PREFIX
-mkdir $INSTALL_PREFIX/lib
-mkdir $INSTALL_PREFIX/include
 
 # OPENBLAS
 #
@@ -43,13 +19,13 @@ install_openblas() {
 	USE_THREAD=$3
 	OLD_DIR=$(pwd)
 
-	if [ -z ${BUILD_DIR+x} ];
+	if [ -z ${BUILD_DIR+x} ]
 	then
 		echo "Error in install_openblas: BUILD_DIR is empty"
 		exit 1
 	fi
 
-	if [ ! -d $BUILD_DIR/open_blas]
+	if [ ! -d $BUILD_DIR/open_blas ]
 	then
 		mkdir $BUILD_DIR/open_blas
 	fi
@@ -63,7 +39,7 @@ install_openblas() {
 		wget http://github.com/xianyi/OpenBLAS/archive/v0.2.19.zip
 	fi
 
-	if [ ! -d OpenBlas-0.2.19]
+	if [ ! -d OpenBLAS-0.2.19 ]
 	then
 		unzip v0.2.19.zip
 	fi
@@ -96,7 +72,7 @@ install_lapack() {
 	LIBOPENBLAS=$3
 	OLD_DIR=$(pwd)
 
-	if [ -z ${LIBOPENBLAS+x} ];
+	if [ -z ${LIBOPENBLAS+x} ]
 	then
 		echo "INFO in install_lapack: LIBOPENBLAS not given, defaulting to INSTALL_PREFIX/lib/libopenblas.a"
 		LIBOPENBLAS=$INSTALL_PREFIX/lib/libopenblas.a
@@ -108,13 +84,13 @@ install_lapack() {
 		exit 1
 	fi
 
-	if [ -z ${BUILD_DIR+x} ];
+	if [ -z ${BUILD_DIR+x} ]
 	then
 		echo "ERROR in install_lapack: BUILD_DIR is not given, exiting."
 		exit 1
 	fi
 
-	if [ ! -d $BUILD_DIR/lapack]
+	if [ ! -d $BUILD_DIR/lapack ]
 	then
 		mkdir $BUILD_DIR/lapack
 	fi
@@ -129,7 +105,7 @@ install_lapack() {
 	fi
 
 	# check if we already unpacked lapack
-	if [ ! -d lapack-3.6.1]
+	if [ ! -d lapack-3.6.1 ]
 	then
 		# else unpack it
 		tar -xzvf lapack-3.6.1.tgz
@@ -159,29 +135,30 @@ install_lapack() {
 # Args:
 # 	BUILD_DIR      (path) - path to build dir which we can use
 # 	INSTALL_PREFIX (path) - path where to install to
-# 	LIBOPENBLAS    (path) - path to libopenblas.a, defaults to INSTALL_PREFIX/lib/libopenblas.a
-# 	LIBLAPACK      (path) - path to liblapack.a, default to INSTALL_PREFIX/lib/libopenblas.a
 #       LAPACKE_DIR    (path) - path to lapack C interface - must be to the directory, not the lib itself. 
 # 	                         Defaults to letting plasma downloading it.
+# 	LIBOPENBLAS    (path) - path to libopenblas.a, defaults to INSTALL_PREFIX/lib/libopenblas.a
+# 	LIBLAPACK      (path) - path to liblapack.a, default to INSTALL_PREFIX/lib/libopenblas.a
+#
 install_plasma() {
 	BUILD_DIR=$1
 	INSTALL_PREFIX=$2
-	LIBOPENBLAS=$3
-	LIBLAPACK=$4
-	LAPACKE_DIR=$5
+	LAPACKE_DIR=$3
+	LIBOPENBLAS=$4
+	LIBLAPACK=$5
 
 	OLD_DIR=$(pwd)
 	PLASMA_PREFIX=$BUILD_DIR/plasma/_build
 
 	export PKG_CONFIG_PATH=/usr/lib/pkgconfig
 
-	if [ -z ${BUILD_DIR+x} ];
+	if [ -z ${BUILD_DIR+x} ]
 	then
 		echo "ERROR in install_plasma: BUILD_DIR is not given, exiting."
 		exit 1
 	fi
 
-	if [ ! -d $BUILD_DIR/plasma]
+	if [ ! -d $BUILD_DIR/plasma ]
 	then
 		mkdir $BUILD_DIR/plasma
 	fi
@@ -192,27 +169,28 @@ install_plasma() {
 	fi
 
 	# if not (LIBOPENBLAS is set and is a file)
-	if [ ! ( ( -z ${LIBOPENBLAS+x} )  -a -f $LIBOPENBLAS ) ]
+	if [ ! -z ${LIBOPENBLAS+x} ]
 	then
 		# set it to its default
 		LIBOPENBLAS=$INSTALL_PREFIX/lib/libopenblas.a
 	fi
 
 	# if not (LIBLAPACK is set and is a file)
-	if [ ! ( ( -z ${LIBLAPACK+x} )  -a -f $LIBLAPACK ) ]
+	if [ ! -z ${LIBLAPACK+x} ]
 	then
 		# set it to its default
 		LIBLAPACK=$INSTALL_PREFIX/lib/liblapack.a
 	fi
 
+	echo $LAPACKE_DIR
+	LAPACKE_FLAG="--downlapc"
 	# if not (LAPACKE_DIR is set and is a directory)
-	if [ ! ( ( -z ${LAPACKE_DIR+x} )  -a -d $LAPACKE_DIR ) ]
+	if [ ! -z ${LAPACKE_DIR+x} ]
 	then
-		# set it to its default
-		LAPACKE_FLAG="--downlapc"
-	else
 		LAPACKE_FLAG="--lapclib=$LAPACKE_DIR"
 	fi
+
+	echo $LAPACKE_FLAG
 
 	cd $BUILD_DIR/plasma
 
@@ -232,9 +210,12 @@ install_plasma() {
 
 	cd plasma-installer_2.8.0
 
+	echo "./setup.py --prefix=$PLASMA_PREFIX --blaslib=$LIBOPENBLAS --cblaslib=$LIBOPENBLAS --lapacklib=$LIBOPENBLAS --notesting $LAPACKE_FLAG"
 	./setup.py --prefix=$PLASMA_PREFIX --blaslib=$LIBOPENBLAS --cblaslib=$LIBOPENBLAS --lapacklib=$LIBOPENBLAS --notesting $LAPACKE_FLAG
-	cp $PLASMA_PREFIX/plasma/include/*.h $INSTALL_PREFIX/include
-	cp $PLASMA_PREFIX/plasma/lib/*.a $INSTALL_PREFIX/lib/
+	cp $PLASMA_PREFIX/include/*.h $INSTALL_PREFIX/include
+	cp $PLASMA_PREFIX/lib/*.a $INSTALL_PREFIX/lib/
+
+	cd $OLD_DIR
 }
 
 #Create Makefile
@@ -242,3 +223,52 @@ install_makefile() {
 	cp template_Makefile Makefile
 	sed -i 's!{$INSTALL_PREFIX}!'"$INSTALL_PREFIX"'!g' $INSTALL_PREFIX/Makefile
 }
+
+WORKING_DIR=$(pwd)
+
+if [ -z ${BUILD_DIR+x} ]
+then
+	BUILD_DIR=./_build
+fi
+BUILD_DIR=$(readlink -f $BUILD_DIR)
+
+if [ -z ${INSTALL_PREFIX+x} ]
+then 
+	echo "Please provide and install prefix in the env INSTALL_PREFIX"
+	echo "INSTALL_PREFIX is unset, aborting installation..."
+	exit 1
+fi
+INSTALL_PREFIX=$(readlink -f $INSTALL_PREFIX)
+
+if [ ! -d $BUILD_DIR ]
+then
+	mkdir $BUILD_DIR
+	__build_dir_created=yes
+fi
+BUILD_DIR=$(readlink -f $BUILD_DIR)
+
+cd $BUILD_DIR
+ 
+if [ ! -d $INSTALL_PREFIX ]
+then
+	mkdir $INSTALL_PREFIX
+fi
+
+if [ ! -d $INSTALL_PREFIX/lib ]
+then
+	mkdir $INSTALL_PREFIX/lib
+fi
+
+if [ ! -d $INSTALL_PREFIX/include ]
+then
+	mkdir $INSTALL_PREFIX/include
+fi
+
+echo "Installing openblas"
+install_openblas $BUILD_DIR $INSTALL_PREFIX 0
+echo "Installing lapack"
+install_lapack $BUILD_DIR $INSTALL_PREFIX
+echo "Installing plasma"
+install_plasma $BUILD_DIR $INSTALL_PREFIX $BUILD_DIR/lapack/lapack-3.6.1/LAPACKE
+echo "Generating makefile"
+install_makefile
