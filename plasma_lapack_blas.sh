@@ -218,8 +218,14 @@ install_plasma() {
 	cd $OLD_DIR
 }
 
-#Create Makefile
+# Usage: install_makefile INSTALL_PREFIX
+#
+# Args:
+# 	INSTALL_PREFIX (path) - path where lib and include live in and have all necessary libraries
+#
+# Creates Makefile
 install_makefile() {
+	INSTALL_PREFIX=$1
 	cp template_Makefile Makefile
 	sed -i 's!{$INSTALL_PREFIX}!'"$INSTALL_PREFIX"'!g' $INSTALL_PREFIX/Makefile
 }
