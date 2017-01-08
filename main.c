@@ -1,39 +1,64 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 #include <plasma.h>
+#include <quark.h>
 #include <papi.h>
 
 int is_close(double a, double b){
 	return (fabs(a - b) < 0.1E-12);
 }
 
-void init_matrix(double* A, int n) {
-	for (int i=0; i<n+n; i++) {
-		A[i] = ((double)rand() / (((double) 10) * (double)RAND_MAX ));
-	}
+void generateMatrix(double *A, int n) {
 
-	// make symetric
-	for (int i=0; i<n; i++) {
-		for (int k=0; k<n; k++) {
-			if (k<i) {
-				A[k+(i*n)] = A[i+(k*n)];
-			}
+	double random_number;
+	srand(time(NULL));
+
+	for (int j = 0; j < n; j++) {
+		for (int i=j; i<n; i++) {
+			random_number = -100.00 + rand() % 200;
+			A[i*n+j] = random_number;
+			A[j*n+i] = random_number;
 		}
 	}
 
 	// make positiv definit
-	for (int i=0; i<n; i+=(n+1)) {
-		A[i] = (double)RAND_MAX;
+	for (int i=0; i<n; i++) {
+		A[i*n+i] = (double) INT_MAX;
 	}
+
+}
+
+	
+void printMatrix(const double * A, int n) {
+
+	printf("\n\n%s\n", "Matrix: ");
+	for (int j = 0; j < n; j++) {
+		printf("\n");
+		for (int i=0; i<n; i++) printf("%f ", A[i*n+j]);
+	}
+	printf("\n");
+
+}
+
+void generateEye(double *A, int n) {
+
+	for (int i=0; i< n; i++) A[i] = 0;
+
+	for (int j = 0; j < n; j++) {
+		A[j*n+j] = 1;
+
+	}
+
 }
 
 int main()
 {
-	int n = 100;
+	int n = 1000;
 	double* A = calloc(n*n, sizeof(double));
 	PLASMA_enum uplo=PlasmaUpper; //here: does not matter, as we store the full matrix
-	init_matrix(A, n);
+	generateMatrix(A, n);
 	int error;
 
 	// papi variables
@@ -48,6 +73,8 @@ int main()
 		printf("Error in PLASMA_Init: %i\n", error);
 		exit (1);
 	}
+
+	//printMatrix(A, n);
 
 	PAPI_flops(&rtime, &ptime, &flpops, &mflops);
 	error = PLASMA_dpotrf(uplo, n, A, n);
