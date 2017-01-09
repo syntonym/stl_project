@@ -59,7 +59,7 @@ void cloneMatrix(double* A, double* B, int n) {
 	}
 }
 
-int residual(double* L, double* A, double* work, int n) {
+double residual(double* L, double* A, double* work, int n) {
 	char norm = '1';
 	// L L^t
 	cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans, n, n, n, 1, L, n, L, n, 0, work, n);
