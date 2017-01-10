@@ -45,12 +45,12 @@ def write_data(data):
     with open(DATABASE_NAME, mode="a", encoding="utf-8") as f:
         f.write(data)
 
-def main(max_cores=2, max_n=1000, timeout=60, repitition=1, n_step=100):
+def main(n_max=1000, timeout=60, repitition=1, n_step=100, max_cores=6):
     """
     generate some data
 
     max_cores (int) - how many cores to use maximally
-    max_n     (int) - how big the dimension will be sized maximally
+    n_max     (int) - how big the dimension will be sized maximally
     timeout   (int) - how long to wait for a single run
     """
 
@@ -62,22 +62,23 @@ def main(max_cores=2, max_n=1000, timeout=60, repitition=1, n_step=100):
     for _ in range(repitition):
         data = []
 
-        for cores in range(1, max_cores):
-            for n in range(100, max_n, n_step):
+        for cores in [2**i for i in range(1, max_cores+1)]:
+            for n in range(100, n_max+n_step, n_step):
                 try:
                     cp = subprocess.run(["./main", str(n), str(cores)], stdout=subprocess.PIPE, check=True, timeout=timeout)
                     datapoint = json.loads(cp.stdout.decode("utf-8"))
+                    data.append(datapoint)
                 except subprocess.TimeoutExpired as e:
                     datapoint = {"type": "error", "msg": "Timeout"}
-
-                data.append(datapoint)
+                    data.append(datapoint)
+                    break
 
         for dat in data:
             serialized = json.dumps({"file_hash": file_hash, "git_id": git_id, "data": dat})
             write_data(serialized + ",\n")
 
 if __name__ == "__main__":
-    main( 4, 2000, repitition=5)
+    main(n_max=4000, repitition=3)
 
 
 
