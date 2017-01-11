@@ -67,7 +67,7 @@ double residual(double* L, double* A, double* work, int n) {
 	cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans, n, n, n, 1, L, n, L, n, 0, work, n);
 
 	// LL^t - A
-    	cblas_daxpy( n*n, -1, A, 1, work, 1 )
+    	cblas_daxpy( n*n, -1, A, 1, work, 1 );
 
 	double o_value = dlange_(&norm, &n, &n, work, &n, NULL);
 	double A_norm = dlange_(&norm, &n, &n, A, &n, NULL);
