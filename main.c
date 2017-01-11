@@ -61,18 +61,18 @@ void cloneMatrix(double* A, double* B, int n) {
 }
 
 double residual(double* L, double* A, double* work, int n) {
+
 	char norm = '1';
 	// L L^t
 	cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans, n, n, n, 1, L, n, L, n, 0, work, n);
 
 	// LL^t - A
-	for (int i=0; i<(n*n); i++) {
-		work[i] = work[i] - A[i];
-	}
+    	cblas_daxpy( n*n, -1, A, 1, work, 1 )
 
 	double o_value = dlange_(&norm, &n, &n, work, &n, NULL);
+	double A_norm = dlange_(&norm, &n, &n, A, &n, NULL);
 
-	return o_value;
+	return o_value/A_norm;
 
 }
 
