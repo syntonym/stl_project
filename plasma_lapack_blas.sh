@@ -120,7 +120,7 @@ install_lapack() {
 	ulimit -s 65000
 
 	make
-	cp */include/*.h $INSTALL_PREFIX/include/
+	cp */include/*.h $INSTALL_PREFIX/include
 	cp *.a $INSTALL_PREFIX/lib
 
 	cd $OLD_DIR
@@ -210,8 +210,8 @@ install_plasma() {
 
 	cd plasma-installer_2.8.0
 
-	echo "./setup.py --prefix=$PLASMA_PREFIX --blaslib=$LIBOPENBLAS --cblaslib=$LIBOPENBLAS --lapacklib=$LIBOPENBLAS --notesting $LAPACKE_FLAG"
-	./setup.py --prefix=$PLASMA_PREFIX --blaslib=$LIBOPENBLAS --cblaslib=$LIBOPENBLAS --lapacklib=$LIBOPENBLAS --notesting $LAPACKE_FLAG
+	echo "./setup.py --prefix=$PLASMA_PREFIX --blaslib=$LIBOPENBLAS --cblaslib=$LIBOPENBLAS --lapacklib=$LIBLAPACK --notesting $LAPACKE_FLAG"
+	./setup.py --prefix=$PLASMA_PREFIX --blaslib=$LIBOPENBLAS --cblaslib=$LIBOPENBLAS --lapacklib=$LIBLAPACK $LAPACKE_FLAG --notesting 
 	cp $PLASMA_PREFIX/include/*.h $INSTALL_PREFIX/include
 	cp $PLASMA_PREFIX/lib/*.a $INSTALL_PREFIX/lib/
 
@@ -332,7 +332,7 @@ install_openblas $BUILD_DIR $INSTALL_PREFIX 0
 echo "Installing lapack"
 install_lapack $BUILD_DIR $INSTALL_PREFIX
 echo "Installing plasma"
-install_plasma $BUILD_DIR $INSTALL_PREFIX $BUILD_DIR/lapack/lapack-3.6.1/LAPACKE
+install_plasma $BUILD_DIR $INSTALL_PREFIX $BUILD_DIR/lapack/lapack-3.6.1/liblapacke.a
 echo "Installing PAPI"
 install_papi $BUILD_DIR $INSTALL_PREFIX
 echo "Generating makefile"
