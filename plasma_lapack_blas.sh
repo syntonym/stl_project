@@ -119,7 +119,16 @@ install_lapack() {
 	sed -i 's!../../libcblas.a!'"$LIBOPENBLAS"'!g' make.inc
 	ulimit -s 65000
 
+	#Building LAPACK
 	make
+
+	#Building LAPACKE (C Interface)
+	echo "Installing LAPACKE (C Interface) - this may take a while"
+	cd LAPACKE
+	make
+	
+	#copying files
+	cd ..
 	cp */include/*.h $INSTALL_PREFIX/include
 	cp *.a $INSTALL_PREFIX/lib
 
