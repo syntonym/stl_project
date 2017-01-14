@@ -1,4 +1,4 @@
-PAPI_LIB=-lpapi
+PAPI_LIB={$INSTALL_PREFIX}/lib/libpapi.a
 PLASMA_LINK=-Wall -Wextra -Wpedantic -std=iso9899:2011 -I{$INSTALL_PREFIX}/include 
 LIBS={$INSTALL_PREFIX}/lib/libplasma.a {$INSTALL_PREFIX}/lib/libquark.a {$INSTALL_PREFIX}/lib/libcoreblas.a {$INSTALL_PREFIX}/lib/libcoreblasqw.a {$INSTALL_PREFIX}/lib/liblapack.a {$INSTALL_PREFIX}/lib/liblapacke.a -lm -lpthread -lhwloc {$INSTALL_PREFIX}/lib/libopenblas.a {$INSTALL_PREFIX}/lib/libplasma.a {$INSTALL_PREFIX}/lib/libquark.a {$INSTALL_PREFIX}/lib/libcoreblas.a {$INSTALL_PREFIX}/lib/libcoreblasqw.a {$INSTALL_PREFIX}/lib/liblapack.a {$INSTALL_PREFIX}/lib/liblapacke.a -lm -lpthread -lhwloc {$INSTALL_PREFIX}/lib/libopenblas.a
 
