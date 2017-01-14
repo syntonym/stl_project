@@ -292,8 +292,9 @@ install_papi() {
 # Creates Makefile
 install_makefile() {
 	INSTALL_PREFIX=$1
+	cd ..
 	cp template_Makefile Makefile
-	sed -i 's!{$INSTALL_PREFIX}!'"$INSTALL_PREFIX"'!g' $INSTALL_PREFIX/Makefile
+	sed -i 's!{$INSTALL_PREFIX}!'"$INSTALL_PREFIX"'!g' Makefile
 }
 
 WORKING_DIR=$(pwd)
