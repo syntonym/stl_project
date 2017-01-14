@@ -346,4 +346,4 @@ install_plasma $BUILD_DIR $INSTALL_PREFIX $BUILD_DIR/lapack/lapack-3.6.1/liblapa
 echo "Installing PAPI"
 install_papi $BUILD_DIR $INSTALL_PREFIX
 echo "Generating makefile"
-install_makefile
+install_makefile $INSTALL_PREFIX
