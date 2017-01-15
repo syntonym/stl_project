@@ -136,4 +136,8 @@ int main(int argc, char **argv)
 	generateMatrix(A, n);
 	cloneMatrix(A, B, n);
 	measure_PLASMA_dpotrf(A, B, work, uplo, n, cores);
+
+	free(A);
+	free(B);
+	free(work);
 }
