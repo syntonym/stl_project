@@ -45,7 +45,7 @@ def write_data(data):
     with open(DATABASE_NAME, mode="a", encoding="utf-8") as f:
         f.write(data)
 
-def main(n_max=1000, timeout=60, repitition=1, n_step=100, max_cores=6):
+def main(n_max=1000, timeout=60, repitition=1, n_step=100):
     """
     generate some data
 
@@ -62,7 +62,7 @@ def main(n_max=1000, timeout=60, repitition=1, n_step=100, max_cores=6):
     for _ in range(repitition):
         data = []
 
-        for cores in [2**i for i in range(1, max_cores+1)]:
+        for cores in [1, 2, 4, 8, 16, 32, 48]:
             for n in range(100, n_max+n_step, n_step):
                 try:
                     cp = subprocess.run(["./main", str(n), str(cores)], stdout=subprocess.PIPE, check=True, timeout=timeout)
@@ -78,7 +78,7 @@ def main(n_max=1000, timeout=60, repitition=1, n_step=100, max_cores=6):
             write_data(serialized + ",\n")
 
 if __name__ == "__main__":
-    main(n_max=4000, repitition=3)
+    main(n_max=6000, repitition=5)
 
 
 
