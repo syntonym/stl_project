@@ -64,7 +64,7 @@ double residual(double* L, double* A, double* work, int n) {
 
 	char norm = '1';
 	// L L^t
-	cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans, n, n, n, 1, L, n, L, n, 0, work, n);
+	PLASMA_dgemm(PlasmaNoTrans, PlasmaTrans, n, n, n, 1, L, n, L, n, 0, work, n);
 
 	// LL^t - A
     	cblas_daxpy( n*n, -1, A, 1, work, 1 );
