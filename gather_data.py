@@ -62,14 +62,14 @@ def main(n_max=1000, timeout=60, repitition=1, n_step=100):
     for _ in range(repitition):
         data = []
 
-        for cores in [1, 2, 4, 8, 16, 32, 48]:
+        for cores in [8]:
             for n in range(100, n_max+n_step, n_step):
                 try:
                     cp = subprocess.run(["./main", str(n), str(cores)], stdout=subprocess.PIPE, check=True, timeout=timeout)
                     datapoint = json.loads(cp.stdout.decode("utf-8"))
                     data.append(datapoint)
                 except subprocess.TimeoutExpired as e:
-                    datapoint = {"type": "error", "msg": "Timeout"}
+                    datapoint = {"type": "error", "msg": "Timeout", "n": n, "cores": cores}
                     data.append(datapoint)
                     break
 
@@ -78,7 +78,7 @@ def main(n_max=1000, timeout=60, repitition=1, n_step=100):
             write_data(serialized + ",\n")
 
 if __name__ == "__main__":
-    main(n_max=6000, repitition=5)
+    main(n_max=6000, repitition=1)
 
 
 
