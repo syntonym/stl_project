@@ -1,0 +1,34 @@
+\documentclass[a4paper,final,ngerman,english]{article} 
+\usepackage[a4paper,final,pdfdisplaydoctitle,pdfauthor={My name},pdftitle={Title of my paper}]{hyperref}
+\usepackage{amsmath,amsthm,amssymb,amsfonts,pgf,algorithm,algorithmic,array,multirow,fixltx2e,colortbl,tabularx,rotating,listings,stmaryrd,ifsym,marvosym}
+\usepackage[ngerman]{babel} %New german orthography
+\usepackage[T1]{fontenc} 
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+\usepackage{lmodern} 
+\pdfcompresslevel=9
+%
+\begin{document}
+\lstset{postbreak=\space,breakindent=5pt,breaklines,basicstyle=\scriptsize,frame=trbl,label=DescriptiveLabel} %Set defaults for listings
+\selectlanguage{english} %probably not necessary, just to be on the safe side
+\pagestyle{headings}
+%
+\title{Title of my paper}
+\author{My name}
+\maketitle
+%
+\begin{abstract}
+write a short abstract here: introduction, goals, implementation, evaluation, conclusions
+\end{abstract}
+\section{Introduction}
+How to cite: \cite{10.1109/MCSE.2005.34}
+\section{Implementation}
+\section{Evaluation}
+\section{Conclusions}
+%  
+\bibliographystyle{plain} %Switches are plain,unsrt,abbrv,alpha.
+\begin{footnotesize}
+  \bibliography{techreport} %Publications
+\end{footnotesize}
+\end{document}
+
