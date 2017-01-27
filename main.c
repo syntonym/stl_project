@@ -18,7 +18,7 @@ void generateMatrix(double *A, int n) {
 
 	for (int j = 0; j < n; j++) {
 		for (int i=j; i<n; i++) {
-			random_number = ((double)rand() / (((double) 10) * (double)RAND_MAX ));
+			random_number = ((double)rand() / ( (double)RAND_MAX );
 			A[i*n+j] = random_number;
 			A[j*n+i] = random_number;
 		}
@@ -26,7 +26,7 @@ void generateMatrix(double *A, int n) {
 
 	// make positiv definit
 	for (int i=0; i<n; i++) {
-		A[i*n+i] = (double) INT_MAX;
+		A[i*n+i] += n;
 	}
 
 }
@@ -61,6 +61,13 @@ void cloneMatrix(double* A, double* B, int n) {
 
 double residual(double* L, double* A, double* work, int n) {
 
+	//make L lower triangular
+	for (int j=1; j<n; j++) {
+		for (int i=0; i<j; i++) {
+			L[j*n+i]=0;
+		}
+	}
+
 	// L L^t
 	PLASMA_dgemm(PlasmaNoTrans, PlasmaTrans, n, n, n, 1, L, n, L, n, 0, work, n);
 
@@ -74,7 +81,7 @@ double residual(double* L, double* A, double* work, int n) {
 
 }
 
-int measure_PLASMA_dpotrf(double* A, double* B, double* work, PLASMA_enum uplo, int n, int cores) {
+int measure_PLASMA_dpotrf(double* A, double* L, double* work, PLASMA_enum uplo, int n, int cores) {
 
 	// papi variables
 	float rtime, ptime, mflops;
@@ -90,11 +97,11 @@ int measure_PLASMA_dpotrf(double* A, double* B, double* work, PLASMA_enum uplo, 
 	}
 
 	PAPI_flops(&rtime, &ptime, &flpops, &mflops);
-	error = PLASMA_dpotrf(uplo, n, A, n);
+	error = PLASMA_dpotrf(uplo, n, L, n);
 	PAPI_flops(&rtime, &ptime, &flpops, &mflops);
 
 
-	res = residual(A, B, work, n);
+	res = residual(L, A, work, n);
 
 	printf("{ \"type\":\"result\", \"data\":{ \"n\": %i, \"rtime\" : %f, \"ptime\": %f, \"flpops\": %llu , \"mflops\": %f, \"res\": %f, \"cores\": %i}}\n", n, rtime, ptime, flpops, mflops, res, cores);
 
@@ -130,7 +137,7 @@ int main(int argc, char **argv)
 	double* A = calloc(n*n, sizeof(double));
 	double* B = calloc(n*n, sizeof(double));
 	double * work = malloc(n*n*sizeof(double));
-	PLASMA_enum uplo=PlasmaUpper; //here: does not matter, as we store the full matrix
+	PLASMA_enum uplo=PlasmaLower; //here: does not matter, as we store the full matrix
 	generateMatrix(A, n);
 	cloneMatrix(A, B, n);
 	measure_PLASMA_dpotrf(A, B, work, uplo, n, cores);
