@@ -18,7 +18,7 @@ void generateMatrix(double *A, int n) {
 
 	for (int j = 0; j < n; j++) {
 		for (int i=j; i<n; i++) {
-			random_number = ((double)rand() / ( (double)RAND_MAX );
+			random_number = ((double)rand() / ( (double)RAND_MAX ));
 			A[i*n+j] = random_number;
 			A[j*n+i] = random_number;
 		}
