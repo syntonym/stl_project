@@ -103,7 +103,7 @@ int measure_PLASMA_dpotrf(double* A, double* L, double* work, PLASMA_enum uplo, 
 
 	res = residual(L, A, work, n);
 
-	printf("{ \"type\":\"result\", \"data\":{ \"n\": %i, \"rtime\" : %f, \"ptime\": %f, \"flpops\": %llu , \"mflops\": %f, \"res\": %f, \"cores\": %i}}\n", n, rtime, ptime, flpops, mflops, res, cores);
+	printf("{ \"type\":\"result\", \"data\":{ \"n\": %i, \"rtime\" : %f, \"ptime\": %f, \"flpops\": %llu , \"mflops\": %f, \"res\": %e, \"cores\": %i}}\n", n, rtime, ptime, flpops, mflops, res, cores);
 
 	if (error != PLASMA_SUCCESS) {
 		printf("{\"type\": \"error\", \"errorcode\": %i, \"msg\": \"Error in PLASMA_dpotrf: %i\"}\n", error, error);
