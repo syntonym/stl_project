@@ -6,7 +6,7 @@
 #include <quark.h>
 #include <papi.h>
 #include <cblas.h>
-#include <lapack.h>
+#include <lapacke.h>
 
 int is_close(double a, double b){
 	return (fabs(a - b) < 0.1E-12);
