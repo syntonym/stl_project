@@ -6,6 +6,7 @@
 #include <quark.h>
 #include <papi.h>
 #include <cblas.h>
+#include "lapack.h"
 
 int is_close(double a, double b){
 	return (fabs(a - b) < 0.1E-12);
@@ -118,6 +119,40 @@ int measure_PLASMA_dpotrf(double* A, double* L, double* work, PLASMA_enum uplo, 
 	return 0;
 }
 
+int measure_LAPACK_dpotrf(double* A, double* L, double* work, int n) {
+	// papi variables
+	float rtime, ptime, mflops;
+	long long flpops;
+
+	double res;
+	int error;
+
+	char uplo = 'L';
+	int info = 0;
+
+	PAPI_flops(&rtime, &ptime, &flpops, &mflops);
+	dpotrf_(&uplo, &n, A, &n, &info);
+	PAPI_flops(&rtime, &ptime, &flpops, &mflops);
+
+
+	error = PLASMA_Init(24);
+	res = residual(L, A, work, n);
+
+	printf("{ \"type\":\"result\", \"data\":{ \"n\": %i, \"rtime\" : %f, \"ptime\": %f, \"flpops\": %llu , \"mflops\": %f, \"res\": %e, \"cores\": \"lapack\"}}\n", n, rtime, ptime, flpops, mflops, res);
+
+	if (error != PLASMA_SUCCESS) {
+		printf("{\"type\": \"error\", \"errorcode\": %i, \"msg\": \"Error in PLASMA_dpotrf: %i\"}\n", error, error);
+		exit(1);
+	}
+	error = PLASMA_Finalize();
+	if (error != PLASMA_SUCCESS) {
+		printf("{\"type\": \"error\", \"errorcode\": %i, \"msg\": \"Error in PLASMA_Finalize:%i\"}\n", error, error);
+		exit(1);
+	}
+
+	return 0;
+}
+
 /**
  *
  * main N CORES
@@ -128,19 +163,25 @@ int measure_PLASMA_dpotrf(double* A, double* L, double* work, PLASMA_enum uplo, 
  */
 int main(int argc, char **argv)
 {
-	if (argc < 2) {
+	if (argc < 3) {
 		printf("Too few arguments\n");
 		exit(1);
 	}
 	int n = atoi(argv[1]);
-	int cores = atoi(argv[2]);
 	double* A = calloc(n*n, sizeof(double));
 	double* B = calloc(n*n, sizeof(double));
 	double * work = malloc(n*n*sizeof(double));
 	PLASMA_enum uplo=PlasmaLower; //here: does not matter, as we store the full matrix
 	generateMatrix(A, n);
 	cloneMatrix(A, B, n);
-	measure_PLASMA_dpotrf(A, B, work, uplo, n, cores);
+
+	int cores = atoi(argv[2]);
+
+	if (argv[2][0] == 'l') {
+		measure_LAPACK_dpotrf(A, B, work, n);
+	} else {
+		measure_PLASMA_dpotrf(A, B, work, uplo, n, cores);
+	}
 
 	free(A);
 	free(B);
