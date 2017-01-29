@@ -6,7 +6,7 @@
 #include <quark.h>
 #include <papi.h>
 #include <cblas.h>
-#include "lapack.h"
+#include <lapack.h>
 
 int is_close(double a, double b){
 	return (fabs(a - b) < 0.1E-12);
@@ -131,7 +131,7 @@ int measure_LAPACK_dpotrf(double* A, double* L, double* work, int n) {
 	int info = 0;
 
 	PAPI_flops(&rtime, &ptime, &flpops, &mflops);
-	dpotrf_(&uplo, &n, A, &n, &info);
+	dpotrf_(&uplo, &n, L, &n, &info);
 	PAPI_flops(&rtime, &ptime, &flpops, &mflops);
 
 
