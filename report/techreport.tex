@@ -6,6 +6,8 @@
 \usepackage{ucs}
 \usepackage[utf8x]{inputenc}
 \usepackage{lmodern} 
+\usepackage{textcomp}
+\usepackage{subcaption}
 \pdfcompresslevel=9
 %
 \begin{document}
@@ -15,7 +17,7 @@
 %
 \title{Plasma scaling study}
 \author{Simon Haendeler, Severin Staudinger}
-\institute{Fakultät für Informatik, Universität Wien}
+%\institute{Fakultät für Informatik, Universität Wien}
 \maketitle
 %
 \begin{abstract}
@@ -26,8 +28,8 @@
 \section{Introduction}
 In this paper we demonstrate how a driver function of PLASMA [1] scales.
 Therefor we decided to show this by the cholesky factorization, which is an important decomposition of symmetric positive definite matrices in the field of scientific computing.
-To achieve this we implemented PLASMA's \textit{DPOTRF} routine and measured the processing time of its execution on two, four, eight, sixteen,..., 48 cores. For time measuring we used the library PAPI [2].\\
-All measurements were done on a system with an x86\_64 architecture, 48 CPUs, one thread per core, AMD Opteron(tm) Processor 6174 with a theoretical peak performance of 2200.00 MHz. Furthermore there are 8 NUMA nodes, which combine six cores per each node.
+To achieve this we implemented PLASMA's \textit{DPOTRF} routine and measured the processing time of its execution on two, four, eight, sixteen, \ldots, 48 cores. For time measuring we used the library PAPI [2].\\
+All measurements were done on a system with an x86\_64 architecture, 48 CPUs, one thread per core, AMD Opteron\texttrademark{} Processor 6174 with a theoretical peak performance of 2200.00 MHz. Furthermore there are 8 NUMA nodes, which combine six cores per each node.
 In the end we compared PLASMA's \textit{DPOTRF} runtimes to the sequential cholesky decomposition implemented in LAPACK [3] and calculated absolute and relative speedups.
 
 \section{Implementation}
@@ -44,7 +46,22 @@ Systematic error could still be present i.e.\ long running processes which affec
 are still possible. Although we tried to control for those manually via htop and similar tools, we cannot exclude
 those with 100\% certainty.
 
-In figure~%\ref{fig:runtime}
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}{0.4\textwidth}
+		\includegraphics[width=\textwidth]{ptime}
+		\caption{Process time}
+\label{fig:runtime}
+	\end{subfigure}
+	\begin{subfigure}{0.4\textwidth}
+		\includegraphics[width=\textwidth]{rel_speedup}
+		\caption{Relative Speedup}
+\label{fig:rel}
+	\end{subfigure}
+	\caption{Runtime of PLASMA vs LAPACK}
+\end{figure}
+
+In figure~\ref{fig:runtime}
 we see the runtime of the LAPACK version and of the PLASMA version with different amount of cores/threads used.
 As expected the runtime mostly increases like \(x^3\).
 The single threaded PLASMA version is slightly slower than the sequential LAPACK version.
@@ -53,7 +70,7 @@ The versions for 8 and 16 threads are very close together. 32 and 48 threads are
 we expect that this gap should be relativly narrow.
 There are bumps in the graph of the LAPACK version for \(n = 4100\) and \(n = 5100 \).
 
-In figure~%\ref{fig:rel}
+In figure~\ref{fig:rel}
 we see the relative speedup for each version.
 For comparison there are black lines at 2, 4, 8, 16, 32, 48 which represent the theoretical possible speedups.
 We can see that the parallel versions start slower than the sequential version.
@@ -63,10 +80,25 @@ For a higher thread number the $n$ is higher when the maxima is reached.
 Only 2 and 4 threads nearly reaches its theoretical performance, the higher the amount of threads,
 the worse the performance relatively to the theoretical performance.
 
-The residuum is shown in figure~%\ref{fig:residuum}
-. All PLASMA versions have the same residuum behavior, but LAPACK is always a bit better.  
+\begin{figure}
+	\centering
+	\includegraphics[width=0.4\textwidth]{res}
+	\caption{Residuum}
+\label{fig:residuum}
+\end{figure}
+\begin{figure}
+	\centering
+	\includegraphics[width=0.4\textwidth]{mflops}
+	\caption{MFlops per second}
+\label{fig:mflops}
+\end{figure}
+
+The residuum is shown in figure~\ref{fig:residuum}.
+All PLASMA versions have the same residuum behavior, but LAPACK is always a bit better.  
 There are certain thresholds after which the residuual gets worse (200, 500, 1000, 2000, 4000).
 After these sudden increases the residuum gets better with higher $n$.
+
+In figure~\ref{fig:mflops} we see the 
 
 \section{Conclusions}
 We can see clearly that PLASMA scales with the cores as expected.
@@ -77,19 +109,6 @@ Sadly for a high number of threads it does not reach its theoretical peak perfor
 \begin{footnotesize}
   \bibliography{techreport} %Publications
 \end{footnotesize}
-
-\begin{thebibliography}{4}
-
-\bibitem{}
-PLASMA. http://www.netlib.org/plasma/
-
-\bibitem{}
-PAPI. http://icl.cs.utk.edu/papi/
-
-\bibitem{}
-LAPACK. http://www.netlib.org/lapack/
-
-\end{thebibliography}
 
 \end{document}
 
