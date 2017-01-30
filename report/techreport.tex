@@ -30,9 +30,11 @@ To achieve this we implemented PLASMA's \textit{DPOTRF} routine and measured the
 All measurements were done on a system with an x86\_64 architecture, 48 CPUs, one thread per core, AMD Opteron(tm) Processor 6174 with a theoretical peak performance of 2200.00 MHz. Furthermore there are 8 NUMA nodes, which combine six cores per each node.
 In the end we compared PLASMA's \textit{DPOTRF} runtimes to the sequential cholesky decomposition implemented in LAPACK [3] and calculated absolute and relative speedups.
 
-
-How to cite:~\cite{10.1109/MCSE.2005.34}
 \section{Implementation}
+
+
+
+
 \section{Evaluation}
 Because the measurement was done on a shared system
 we could not guarantee that our program was the only one running.
@@ -75,5 +77,19 @@ Sadly for a high number of threads it does not reach its theoretical peak perfor
 \begin{footnotesize}
   \bibliography{techreport} %Publications
 \end{footnotesize}
+
+\begin{thebibliography}{4}
+
+\bibitem{}
+PLASMA. http://www.netlib.org/plasma/
+
+\bibitem{}
+PAPI. http://icl.cs.utk.edu/papi/
+
+\bibitem{}
+LAPACK. http://www.netlib.org/lapack/
+
+\end{thebibliography}
+
 \end{document}
 
