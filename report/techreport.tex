@@ -26,7 +26,7 @@
 	of LAPACK\@.
 \end{abstract}
 \section{Introduction}
-In this paper we demonstrate how a driver function of PLASMA \cite{plasma01} scales.
+In this paper we demonstrate how a driver function of PLASMA~\cite{plasma01} scales.
 Therefor we decided to show this by the cholesky factorization, which is an important decomposition of symmetric positive definite matrices in the field of scientific computing.
 To achieve this we implemented PLASMA's \textit{DPOTRF} routine and measured the processing time of its execution on two, four, eight, sixteen, 32 and 48 cores. For time measuring we used the library PAPI [2].\\
 All measurements were done on a system with an x86\_64 architecture, 48 CPUs, one thread per core, AMD Opteron\texttrademark{} Processor 6174 with a theoretical peak performance of 2200.00 MHz. Furthermore there are 8 NUMA nodes, which combine six cores per each node.
@@ -36,7 +36,7 @@ In the end we compared PLASMA's \textit{DPOTRF} runtimes to the sequential chole
 In order to build PLASMA we installed OpenBLAS [4] and LAPACK [3] from the latest stable releases.
 Since on our system is just one thread per core we built OpenBLAS single-threaded with \textit{MAKE USE\_THREAD=0}.
 To guarantee portability we decided to make a bash-script, which install every necessary library fully automatically and also auto-generate a Makefile, which compiles our \textit{main.c} programm.
-This is very useful, because anybody who is interested in this PLASMA scaling study can simply run this script with \textit{bash plasma\_lapack\_blas.sh} .
+This is very useful, because anybody who is interested in this PLASMA scaling study can simply run this script with \textit{bash plasma\_lapack\_blas.sh}.
 After small adjustments of the generated template\_Makefile the user can compile the programm with \textit{make}.
 \\
 To verify a correct execution of the test programm we used valgrind.
@@ -87,17 +87,19 @@ For a higher thread number the $n$ is higher when the maxima is reached.
 Only 2 and 4 threads nearly reaches its theoretical performance, the higher the amount of threads,
 the worse the performance relatively to the theoretical performance.
 
-\begin{figure}
+\begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.4\textwidth]{res}
+	\begin{subfigure}{0.4\textwidth}
+	\includegraphics[width=\textwidth]{res}
 	\caption{Residuum}
 \label{fig:residuum}
-\end{figure}
-\begin{figure}
-	\centering
-	\includegraphics[width=0.4\textwidth]{mflops}
+	\end{subfigure}
+	\begin{subfigure}{0.4\textwidth}
+	\includegraphics[width=\textwidth]{mflops}
 	\caption{MFlops per second}
 \label{fig:mflops}
+	\end{subfigure}
+	\caption{Residuum and Performance comparisons}
 \end{figure}
 
 The residuum is shown in figure~\ref{fig:residuum}.
@@ -105,11 +107,33 @@ All PLASMA versions have the same residuum behavior, but LAPACK is always a bit 
 There are certain thresholds after which the residuual gets worse (200, 500, 1000, 2000, 4000).
 After these sudden increases the residuum gets better with higher $n$.
 
-In figure~\ref{fig:mflops} we see the 
+In figure~\ref{fig:mflops} we see the Mflops per second.
+We see that both LAPACK and PLASMA with one core are very similar. 
 
 \section{Conclusions}
-We can see clearly that PLASMA scales with the cores as expected.
-Sadly for a high number of threads it does not reach its theoretical peak performance.
+When looking at the runtime we can see that PLASMA scales with additional cores. 
+For a lower amount of cores the scaling is very good and nearly multiplies the performance with the amount of cores.
+As soon as we go higher than 8 the scaling gets worse.
+The test server has 4 CPUs with each 12 cores, so when the number of cores is higher than 12 additional
+overhead should come into play.
+32 cores reaches the performance we would have wished for 16 cores.
+This trend also goes on with 48 cores, the maximum on the system. 
+
+LAPACK has consistently a better residuum than PLASMA.\@
+This is very surprising, because LAPACK is used internally of PLASMA.\@
+Maybe the merging of the subsolutions of the multiple LAPACK invocations affect the accuracy.
+In that case we would expect the residuum to grow with the number of cores, which we cannot see here.
+Maybe we could see this if the residuum was more stable, i.e.\ when averaging over a higher number of trails.
+One could also do additional statistic analysis of the result.
+But because the residuum is good enough in the PLASMA case we will not further discuss it here.
+
+It is also surprising that the residuum gets better with higher $n$ between the jumps.
+The jumppoints have a very systematic distribution, so it is likely that
+LAPACK changes some parameters when around these thresholds.
+
+For mflops we roughly get 150 Gflops.
+This is \~70\% of the theoretical peak performance of 211 Gflops/s.
+The numbers seems very high when compared to other publications e.g.~\cite{lawn266}.
 
 %  
 \bibliographystyle{plain} %Switches are plain,unsrt,abbrv,alpha.
