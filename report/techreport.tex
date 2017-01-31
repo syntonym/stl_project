@@ -44,7 +44,7 @@ In the end we compared PLASMA's \textit{DPOTRF} runtimes to the sequential chole
 \section{Implementation}
 
 In order to build PLASMA we installed OpenBLAS~\cite{openblas01} and LAPACK~\cite{lawn20} from the latest stable releases.
-Since on our system has just one thread per core we built OpenBLAS single-threaded with \textit{MAKE USE\_THREAD=0}.
+Since on our system has just one thread per core we built OpenBLAS single-threaded with \textit{MAKE USE\_THREAD=0}.\\
 To guarantee portability we decided to make a bash-script, which install every necessary library fully automatically and also auto-generate a Makefile, which compiles our \textit{main.c} programm.
 Also we coded a second helper bash script {run.sh} which executes \textit{plasma\_lapack\_blas.sh} and delivers the necessary \$INSTALL\_DIRECTORY to the install-bash-script.\\
 If you want to set a specific install directory just modify run.sh and replace {\_install} with your favoured directory.
@@ -75,7 +75,7 @@ void generateMatrix(double *A, int n) {
 }
 \end{lstlisting}
 
-As you can see we simply added n to the diagonal entries, so the sum of the corresponding row elements is less than n. This guarantees that matrix A is positive definite.\\
+As you can see we added n to the diagonal entries. This is because all entries of matrix A are never higher than one and through this little trick the sum of the row elements is less than their corresponding diagonal element. This guarantees that matrix A is positive definite.\\
 \ \\
 For time measurement itself we used \textit{PAPI\_flops()}.
 \begin{lstlisting}
@@ -132,7 +132,7 @@ double residual(double* L, double* A, double* work, int n) {
 \end{lstlisting}
 Since there is no function in PLASMA, LAPACK or BLAS which can compute a matrix multiplication with two triangular matrices as an input we had to set the upper entries of the matrix L to zero.\\
 In the beginning of our implementation we used here BLAS and LAPACK functions, because we don't measure execution time of the residual calculation. When testing we recognized that the residual computation takes a lot of time and so we replaced all functions with the related PLASMA ones.\\
-This resulted in a far quicker execution.
+This resulted in a far quicker execution.\\
 \ \\
 For gathering output data we coded a python-script which hashed the data. This made further processing e.g.\ plotting a lot easier.
 \begin{flushright} Staudinger \end{flushright}
