@@ -171,15 +171,10 @@ The versions for 8 and 16 threads are very close together. 32 and 48 threads are
 we expect that this gap should be relativly narrow.
 There are bumps in the graph of the LAPACK version for \(n = 4100\) and \(n = 5100 \).
 
-In figure~\ref{fig:rel}
-we see the relative speedup for each version.
-For comparison there are black lines at 2, 4, 8, 16, 32, 48 which represent the theoretical possible speedups.
-We can see that the parallel versions start slower than the sequential version.
-Then for relatively low $n$ each version archieves a local maxima.
-For a higher thread number the $n$ is higher when the maxima is reached. 
-
-Only 2 and 4 threads nearly reaches its theoretical performance, the higher the amount of threads,
-the worse the performance relatively to the theoretical performance.
+The residuum is shown in figure~\ref{fig:residuum}.
+All PLASMA versions have the same residuum behavior, but LAPACK is always a bit better.  
+There are certain thresholds after which the residuual gets worse (200, 500, 1000, 2000, 4000).
+After these sudden increases the residuum gets better with higher $n$.
 
 \begin{figure}[h!]
 	\centering
@@ -196,10 +191,15 @@ the worse the performance relatively to the theoretical performance.
 	\caption{Relative and absolute speedups}
 \end{figure}
 
-The residuum is shown in figure~\ref{fig:residuum}.
-All PLASMA versions have the same residuum behavior, but LAPACK is always a bit better.  
-There are certain thresholds after which the residuual gets worse (200, 500, 1000, 2000, 4000).
-After these sudden increases the residuum gets better with higher $n$.
+In figure~\ref{fig:rel}
+we see the relative speedup for each version.
+For comparison there are black lines at 2, 4, 8, 16, 32, 48 which represent the theoretical possible speedups.
+We can see that the parallel versions start slower than the sequential version.
+Then for relatively low $n$ each version archieves a local maxima.
+For a higher thread number the $n$ is higher when the maxima is reached. 
+
+Only 2 and 4 threads nearly reaches its theoretical performance, the higher the amount of threads,
+the worse the performance relatively to the theoretical performance.
 
 \begin{figure}[h!]
 	\centering
@@ -240,7 +240,7 @@ So for all four CPU sockets its \char`\~ $422$ \textit{Gflops/s}.
 We can clearly see that we reach \char`\~ 35\% of the system's theoretical peak performance.
 This is similar to other publications, e.g.~\cite{lawn266},
 although in that case GPUs were used.
-Generally this is a good result for the low effort (just using a library) we had.
+Generally this is a good result for the low additional work we need to integrate PLASMA.
 \begin{flushright} Haendeler \end{flushright} 
 %  
 \bibliographystyle{plain} %Switches are plain,unsrt,abbrv,alpha.
