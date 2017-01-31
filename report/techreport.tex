@@ -11,11 +11,7 @@
 \usepackage{listings}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\lstset{
-language=C,
-tabsize=4,
-showstringspaces=false
-}
+\lstset{language=C,tabsize=4,showstringspaces=false}
 
 \pdfcompresslevel=9
 %
@@ -42,7 +38,8 @@ In this paper we demonstrate how a driver function of PLASMA~\cite{YarKhan2016} 
 Therefor we decided to show this by the cholesky factorization, which is an important decomposition of symmetric positive definite matrices in the field of scientific computing.
 To achieve this we implemented PLASMA's \textit{DPOTRF} routine and measured the processing time of its execution on two, four, eight, sixteen, 32 and 48 cores. For time measuring we used the library PAPI~\cite{icl:59}.\\
 All measurements were done on a system with an x86\_64 architecture, 48 CPUs, one thread per core, AMD Opteron\texttrademark{} Processor 6174 with a theoretical peak performance of 2200.00 MHz. Furthermore there are 8 NUMA nodes, which combine six cores per each node.
-Since it was not easy to found out how many instructions per cycle (IPC) this particular AMD processor can handle, we assumed that it is just as high as in similiar processors of AMD. In ~\cite{amd05} it says that the number of operations which the processor can handle in one cycle is four.
+Since it was not easy to found out how many instructions per cycle (IPC) this particular AMD processor can handle,
+we assumed that it is just as high as in similiar processors of AMD\@. In~\cite{amd05} it says that the number of operations which the processor can handle in one cycle is four.
 In the end we compared PLASMA's \textit{DPOTRF} runtimes to the sequential cholesky decomposition implemented in LAPACK~\cite{lapack03} and calculated absolute and relative speedups.
 
 \section{Implementation}
@@ -137,7 +134,7 @@ Since there is no function in PLASMA, LAPACK or BLAS which can compute a matrix 
 In the beginning of our implementation we used here BLAS and LAPACK functions, because we don't measure execution time of the residual calculation. When testing we recognized that the residual computation takes a lot of time and so we replaced all functions with the related PLASMA ones.\\
 This resulted in a far quicker execution.
 \ \\
-For gathering output data we coded a python-script which hashed the data. This made further processing e.g. plotting a lot easier.
+For gathering output data we coded a python-script which hashed the data. This made further processing e.g.\ plotting a lot easier.
 
 \section{Evaluation}
 Because the measurement was done on a shared system
@@ -156,11 +153,11 @@ those with 100\% certainty.
 \label{fig:runtime}
 	\end{subfigure}
 	\begin{subfigure}{0.4\textwidth}
-		\includegraphics[width=\textwidth]{relSpeedup}
-		\caption{Relative Speedup}
-\label{fig:rel}
+		\includegraphics[width=\textwidth]{res}
+		\caption{Residuum}
+\label{fig:residuum}
 	\end{subfigure}
-	\caption{Runtime of PLASMA vs LAPACK}
+	\caption{Runtime and Residuum of PLASMA vs LAPACK}
 \end{figure}
 
 In figure~\ref{fig:runtime}
@@ -185,22 +182,29 @@ the worse the performance relatively to the theoretical performance.
 \begin{figure}[h!]
 	\centering
 	\begin{subfigure}{0.4\textwidth}
-	\includegraphics[width=\textwidth]{res}
-	\caption{Residuum}
-\label{fig:residuum}
+	\includegraphics[width=\textwidth]{abs_speedup}
+	\caption{Absolute speedup (baseline LAPACK)}
+\label{fig:rel}
 	\end{subfigure}
 	\begin{subfigure}{0.4\textwidth}
-	\includegraphics[width=\textwidth]{mflops}
-	\caption{MFlops per second}
-\label{fig:mflops}
+	\includegraphics[width=\textwidth]{rel_speedup}
+	\caption{Relative speedup (baseline 1 core)}
+\label{fig:abs}
 	\end{subfigure}
-	\caption{Residuum and Performance comparisons}
+	\caption{Relative and absolute speedups}
 \end{figure}
 
 The residuum is shown in figure~\ref{fig:residuum}.
 All PLASMA versions have the same residuum behavior, but LAPACK is always a bit better.  
 There are certain thresholds after which the residuual gets worse (200, 500, 1000, 2000, 4000).
 After these sudden increases the residuum gets better with higher $n$.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\textwidth]{mflops}
+	\caption{MFlops/s LAPACK vs PLASMA} 
+\label{fig:mflops}
+\end{figure}
 
 In figure~\ref{fig:mflops} we see the Mflops per second.
 We see that both LAPACK and PLASMA with one core are very similar. 
@@ -227,10 +231,9 @@ The jumppoints have a very systematic distribution, so it is likely that
 LAPACK changes some parameters when around these thresholds.
 
 For mflops we roughly get 150 Gflops.
-This is \~70\% of the theoretical peak performance of 211 Gflops/s.
-The numbers seems very high when compared to other publications e.g.~\cite{lawn266}
-where not even 50\% of the theoretical peak performance is reached, although in that case
-GPUs were used. 
+We reach \~35\% of the theoretical peak performance of 422 Gflops/s.
+This is similar to other publications, e.g.~\cite{lawn266},
+although in that case GPUs were used.
 
 %  
 \bibliographystyle{plain} %Switches are plain,unsrt,abbrv,alpha.
