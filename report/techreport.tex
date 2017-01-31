@@ -139,7 +139,7 @@ For gathering output data we coded a python-script which hashed the data. This m
 \section{Evaluation}
 Because the measurement was done on a shared system
 we could not guarantee that our program was the only one running.
-Measurement errors through context switches and alike are possible.
+Measurement errors through context switches and alike are possible.\\
 Each datapoint represents 5 measurements that were averaged so that small measurement errors cancel out.
 Systematic error could still be present i.e.\ long running processes which affect all measurements
 are still possible. Although we tried to control for those manually via htop and similar tools, we cannot exclude
@@ -160,6 +160,7 @@ those with 100\% certainty.
 	\caption{Runtime and Residuum of PLASMA vs LAPACK}
 \end{figure}
 
+\ \\
 In figure~\ref{fig:runtime}
 we see the runtime of the LAPACK version and of the PLASMA version with different amount of cores/threads used.
 As expected the runtime mostly increases like \(x^3\).
@@ -221,7 +222,7 @@ This trend also goes on with 48 cores, the maximum on the system.
 
 LAPACK has consistently a better residuum than PLASMA.\@
 This is very surprising, because LAPACK is used internally of PLASMA.\@
-Maybe the merging of the subsolutions of the multiple LAPACK invocations affect the accuracy.
+Maybe the merging of the subsolutions of the multiple LAPACK invocations affect the accuracy.\\
 In that case we would expect the residuum to grow with the number of cores, which we cannot see here.
 Maybe we could see this if the residuum was more stable, i.e.\ when averaging over a higher number of trails.
 One could also do additional statistic analysis of the result.
@@ -231,8 +232,11 @@ It is also surprising that the residuum gets better with higher $n$ between the 
 The jumppoints have a very systematic distribution, so it is likely that
 LAPACK changes some parameters when around these thresholds.
 
-For mflops we roughly get 150 Gflops.
-We reach \~35\% of the theoretical peak performance of 422 Gflops/s.
+For mflops we roughly get 150 Gflops.\\
+We computed the theoretical peak performance for our system as follows:\\
+\textit{2.1 GHz x 12 cores x 4 ops per cycle = 105.6 Gflop/s} per socket.~\cite{lawn266} \\
+So for all four CPU sockets its \char`\~ $422$ \textit{Gflops/s}.
+We can clearly see that we reach \char`\~ 35\% of the system's theoretical peak performance.
 This is similar to other publications, e.g.~\cite{lawn266},
 although in that case GPUs were used.
 Generally this is a good result for the low effort (just using a library) we had.
