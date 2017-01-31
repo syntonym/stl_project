@@ -47,7 +47,7 @@ In order to build PLASMA we installed OpenBLAS~\cite{openblas01} and LAPACK~\cit
 Since on our system has just one thread per core we built OpenBLAS single-threaded with \textit{MAKE USE\_THREAD=0}.\\
 To guarantee portability we decided to make a bash-script, which install every necessary library fully automatically and also auto-generate a Makefile, which compiles our \textit{main.c} programm.
 Also we coded a second helper bash script {run.sh} which executes \textit{plasma\_lapack\_blas.sh} and delivers the necessary \$INSTALL\_DIRECTORY to the install-bash-script.\\
-If you want to set a specific install directory just modify run.sh and replace {\_install} with your favoured directory.
+If you want to set a specific install directory just modify run.sh and replace {.\textbackslash\_install} with your favoured directory.
 When you are ready execute the script with \textit{bash run.sh}.
 After the installation process is done and the Makefile is auto-generated compile the main.c programm with the command \textit{make}.
 To execute the programm simply type into the terminal \textit{"./main n cores"} or \textit{"./main n l"} if you want to measure LAPACKs Cholesky Decomposition.\\ The parameter $n$ stands for the matrix size and $cores$ stands for the number of cores which are used for the computation.\\
