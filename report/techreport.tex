@@ -20,7 +20,7 @@
 \selectlanguage{english} %probably not necessary, just to be on the safe side
 \pagestyle{headings}
 %
-\title{Plasma scaling study}
+\title{PLASMA scaling study}
 \author{Simon Haendeler, Severin Staudinger}
 %\institute{Fakultät für Informatik, Universität Wien}
 \maketitle
@@ -39,11 +39,12 @@ Since it was not easy to found out how many instructions per cycle (IPC) this pa
 Additionally we found a similar project, in which the authors compare the the scaling of a LU factorization in LAPACK~\cite{lawn266}. This paper confirms our assumption that our CPUs can handle 4 operations per cycle, since this study used exactly the same processors as we did.\\
 To calculate relative speedups we compared the runtimes of the multiple core execution to the sequential computation of PLASMA.\\
 In the end we compared PLASMA's \textit{DPOTRF} runtimes to the sequential cholesky decomposition implemented in LAPACK~\cite{lapack03} to calculate the absolute speedup.
+\begin{flushright} Staudinger \end{flushright}
 
 \section{Implementation}
 
 In order to build PLASMA we installed OpenBLAS~\cite{openblas01} and LAPACK~\cite{lawn20} from the latest stable releases.
-Since on our system is just one thread per core we built OpenBLAS single-threaded with \textit{MAKE USE\_THREAD=0}.
+Since on our system has just one thread per core we built OpenBLAS single-threaded with \textit{MAKE USE\_THREAD=0}.
 To guarantee portability we decided to make a bash-script, which install every necessary library fully automatically and also auto-generate a Makefile, which compiles our \textit{main.c} programm.
 This is very useful, because anybody who is interested in this PLASMA scaling study can simply run this script with \textit{bash plasma\_lapack\_blas.sh}.
 After small adjustments of the generated template\_Makefile the user can compile the programm with \textit{make}.
@@ -133,6 +134,7 @@ In the beginning of our implementation we used here BLAS and LAPACK functions, b
 This resulted in a far quicker execution.
 \ \\
 For gathering output data we coded a python-script which hashed the data. This made further processing e.g.\ plotting a lot easier.
+\begin{flushright} Staudinger \end{flushright}
 
 \section{Evaluation}
 Because the measurement was done on a shared system
@@ -205,7 +207,8 @@ After these sudden increases the residuum gets better with higher $n$.
 \end{figure}
 
 In figure~\ref{fig:mflops} we see the Mflops per second.
-We see that both LAPACK and PLASMA with one core are very similar. 
+We see that both LAPACK and PLASMA with one core are very similar.
+\begin{flushright} Haendeler \end{flushright} 
 
 \section{Conclusions}
 When looking at the runtime we can see that PLASMA scales with additional cores. 
@@ -233,7 +236,7 @@ We reach \~35\% of the theoretical peak performance of 422 Gflops/s.
 This is similar to other publications, e.g.~\cite{lawn266},
 although in that case GPUs were used.
 Generally this is a good result for the low effort (just using a library) we had.
-
+\begin{flushright} Haendeler \end{flushright} 
 %  
 \bibliographystyle{plain} %Switches are plain,unsrt,abbrv,alpha.
 \begin{footnotesize}
