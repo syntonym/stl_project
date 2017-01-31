@@ -37,13 +37,12 @@ showstringspaces=false
 \section{Introduction}
 In this paper we demonstrate how a driver function of PLASMA~\cite{plasma01} scales.
 Therefor we decided to show this by the cholesky factorization, which is an important decomposition of symmetric positive definite matrices in the field of scientific computing.\\
-To achieve this we implemented PLASMA's \textit{DPOTRF} routine and measured the processing time of its execution on two, four, eight, sixteen, 32 and 48 cores. For time measuring we used the library PAPI~\cite{papi02}.\\
-In this paper we demonstrate how a driver function of PLASMA~\cite{YarKhan2016} scales.
-Therefor we decided to show this by the cholesky factorization, which is an important decomposition of symmetric positive definite matrices in the field of scientific computing.
-To achieve this we implemented PLASMA's \textit{DPOTRF} routine and measured the processing time of its execution on two, four, eight, sixteen, 32 and 48 cores. For time measuring we used the library PAPI~\cite{icl:59}.\\
+To achieve this we implemented PLASMA's \textit{DPOTRF} routine and measured the runtime and mflops of its execution on two, four, eight, sixteen, 32 and 48 cores. For time measuring we used the library PAPI~\cite{icl:59}.\\
 All measurements were done on a system with an x86\_64 architecture, 48 CPUs, one thread per core, AMD Opteron\texttrademark{} Processor 6174 with a theoretical peak performance of 2200.00 MHz. Furthermore there are 8 NUMA nodes, which combine six cores per each node.
 Since it was not easy to found out how many instructions per cycle (IPC) this particular AMD processor can handle, we assumed that it is just as high as in similiar processors of AMD. In ~\cite{amd05} it says that the number of operations which the processor can handle in one cycle is four.
-In the end we compared PLASMA's \textit{DPOTRF} runtimes to the sequential cholesky decomposition implemented in LAPACK~\cite{lapack03} and calculated absolute and relative speedups.
+Additionally we found a similar project, in which the authors compare the the scaling of a LU factorization in LAPACK~\cite{lawn266}. This paper confirms our assumption that our CPUs can handle 4 operations per cycle, since this study used exactly the same processors as we did.\\
+To calculate relative speedups we compared the runtimes of the multiple core execution to the sequential computation of PLASMA.\\
+In the end we compared PLASMA's \textit{DPOTRF} runtimes to the sequential cholesky decomposition implemented in LAPACK~\cite{lapack03} to calculate the absolute speedup.
 
 \section{Implementation}
 
