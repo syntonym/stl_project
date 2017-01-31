@@ -10,6 +10,71 @@
  year	      = 2012,
 }
 
+@inproceedings {icl:59,
+	title = {PAPI: A Portable Interface to Hardware Performance Counters},
+	journal = {Proceedings of Department of Defense HPCMP Users Group Conference},
+	year = {1999},
+	month = {06-1999},
+	keywords = {papi},
+	author = {Shirley Browne and Christine Deane and George Ho and Phil Mucci}
+}
+
+@TechReport{lawn20,
+ URL	       = "http://www.netlib.org/lapack/lawnspdf/lawn20.pdf",
+ number       = 20,
+ institution  = "LAPACK Working Note",
+ author       = "Edward Anderson and Zhaojun Bai and Christian
+                 Bischof and James W. Demmel and Jack J. Dongarra and
+                 Jeremy Du Croz and Anne Greenbaum and Sven
+                 Hammarling and Alan McKenney and Danny C. Sorensen",
+ title	       = "{LAPACK}: {A} Portable Linear Algebra Library for
+                 High-Performance Computers",
+ utknumber    = "UT-CS-90-105",
+ month	       = may,
+ year	       = 1990,
+}
+
+@INPROCEEDINGS{openblas01,
+author={Z. Xianyi and W. Qian and Z. Yunquan},
+booktitle={2012 IEEE 18th International Conference on Parallel and Distributed Systems},
+title={Model-driven Level 3 BLAS Performance Optimization on Loongson 3A Processor},
+year={2012},
+pages={684-691},
+keywords={cache storage;floating point arithmetic;linear algebra;mathematics computing;multi-threading;multiprocessing systems;optimisation;parallel architectures;public domain software;shared memory systems;software performance evaluation;Chinese Academy of Sciences;Institute of Computing Technology;L1 data cache misses;Loongson 3A 128-bit memory;Loongson 3A architecture;Loongson 3A quadcore processor;OpenBLAS;bank conflicts;basic linear algebra subprograms;extension instructions;fundamental math library;general-purpose 64-bit MIPS64 quadcore processor;mainstream processor vendor;mainstream x86 CPU;model-driven level 3 BLAS performance optimization;multiple threads;open source BLAS project;parallel performance improvement;performance model;register blocking;scientific computing;single precision floating point SIMD instructions;single thread optimization;software prefetching;word length 128 bit;word length 64 bit;Kernel;Optimization;Pipelines;Prefetching;Registers;BLAS;Loongson 3A;MIPS64;Multi-core;Optimization},
+doi={10.1109/ICPADS.2012.97},
+ISSN={1521-9097},
+month={Dec},
+}
+
+@Article{YarKhan2016,
+author="YarKhan, Asim
+and Kurzak, Jakub
+and Luszczek, Piotr
+and Dongarra, Jack",
+title="Porting the PLASMA Numerical Library to the OpenMP Standard",
+journal="International Journal of Parallel Programming",
+year="2016",
+pages="1--22",
+abstract="PLASMA is a numerical library intended as a successor to LAPACK for solving problems in dense linear algebra on multicore processors. PLASMA relies on the QUARK scheduler for efficient multithreading of algorithms expressed in a serial fashion. QUARK is a superscalar scheduler and implements automatic parallelization by tracking data dependencies and resolving data hazards at runtime. Recently, this type of scheduling has been incorporated in the OpenMP standard, which allows to transition PLASMA from the proprietary solution offered by QUARK to the standard solution offered by OpenMP. This article studies the feasibility of such transition.",
+issn="1573-7640",
+doi="10.1007/s10766-016-0441-6",
+url="http://dx.doi.org/10.1007/s10766-016-0441-6"
+}
+
+@article {CPE:CPE3306,
+author = {Donfack, Simplice and Dongarra, Jack and Faverge, Mathieu and Gates, Mark and Kurzak, Jakub and Luszczek, Piotr and Yamazaki, Ichitaro},
+title = {A survey of recent developments in parallel implementations of Gaussian elimination},
+journal = {Concurrency and Computation: Practice and Experience},
+volume = {27},
+number = {5},
+issn = {1532-0634},
+url = {http://dx.doi.org/10.1002/cpe.3306},
+doi = {10.1002/cpe.3306},
+pages = {1292--1309},
+keywords = {Gaussian elimination, LU factorization, parallel, shared memory, multicore},
+year = {2015},
+}
+
 @article {icl:704,
 	title = {Multithreading in the PLASMA Library},
 	journal = {Multi and Many-Core Processing: Architecture, Programming, Algorithms, \& Applications},

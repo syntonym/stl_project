@@ -38,12 +38,16 @@ showstringspaces=false
 In this paper we demonstrate how a driver function of PLASMA~\cite{plasma01} scales.
 Therefor we decided to show this by the cholesky factorization, which is an important decomposition of symmetric positive definite matrices in the field of scientific computing.\\
 To achieve this we implemented PLASMA's \textit{DPOTRF} routine and measured the processing time of its execution on two, four, eight, sixteen, 32 and 48 cores. For time measuring we used the library PAPI~\cite{papi02}.\\
+In this paper we demonstrate how a driver function of PLASMA~\cite{YarKhan2016} scales.
+Therefor we decided to show this by the cholesky factorization, which is an important decomposition of symmetric positive definite matrices in the field of scientific computing.
+To achieve this we implemented PLASMA's \textit{DPOTRF} routine and measured the processing time of its execution on two, four, eight, sixteen, 32 and 48 cores. For time measuring we used the library PAPI~\cite{icl:59}.\\
 All measurements were done on a system with an x86\_64 architecture, 48 CPUs, one thread per core, AMD Opteron\texttrademark{} Processor 6174 with a theoretical peak performance of 2200.00 MHz. Furthermore there are 8 NUMA nodes, which combine six cores per each node.
 Since it was not easy to found out how many instructions per cycle (IPC) this particular AMD processor can handle, we assumed that it is just as high as in similiar processors of AMD. In ~\cite{amd05} it says that the number of operations which the processor can handle in one cycle is four.
 In the end we compared PLASMA's \textit{DPOTRF} runtimes to the sequential cholesky decomposition implemented in LAPACK~\cite{lapack03} and calculated absolute and relative speedups.
 
 \section{Implementation}
-In order to build PLASMA we installed OpenBLAS~\cite{openblas04} and LAPACK from the latest stable releases.
+
+In order to build PLASMA we installed OpenBLAS~\cite{openblas01} and LAPACK~\cite{lawn20} from the latest stable releases.
 Since on our system is just one thread per core we built OpenBLAS single-threaded with \textit{MAKE USE\_THREAD=0}.
 To guarantee portability we decided to make a bash-script, which install every necessary library fully automatically and also auto-generate a Makefile, which compiles our \textit{main.c} programm.
 This is very useful, because anybody who is interested in this PLASMA scaling study can simply run this script with \textit{bash plasma\_lapack\_blas.sh}.
@@ -224,7 +228,9 @@ LAPACK changes some parameters when around these thresholds.
 
 For mflops we roughly get 150 Gflops.
 This is \~70\% of the theoretical peak performance of 211 Gflops/s.
-The numbers seems very high when compared to other publications e.g.~\cite{lawn266}.
+The numbers seems very high when compared to other publications e.g.~\cite{lawn266}
+where not even 50\% of the theoretical peak performance is reached, although in that case
+GPUs were used. 
 
 %  
 \bibliographystyle{plain} %Switches are plain,unsrt,abbrv,alpha.
@@ -234,3 +240,4 @@ The numbers seems very high when compared to other publications e.g.~\cite{lawn2
 
 \end{document}
 
+\grid
