@@ -8,6 +8,15 @@
 \usepackage{lmodern} 
 \usepackage{textcomp}
 \usepackage{subcaption}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\lstset{
+language=C,
+tabsize=4,
+showstringspaces=false
+}
+
 \pdfcompresslevel=9
 %
 \begin{document}
@@ -23,26 +32,104 @@
 \begin{abstract}
 	We are examining the scaling of the PLASMA library in case of the Cholesky Decomposition.
 	We compare the runtime when using a different amount of cores and compare this to the runtime
-	of LAPACK\@.
+	of LAPACK\@. To verify correctness we computed residuals. 
 \end{abstract}
 \section{Introduction}
 In this paper we demonstrate how a driver function of PLASMA~\cite{plasma01} scales.
 Therefor we decided to show this by the cholesky factorization, which is an important decomposition of symmetric positive definite matrices in the field of scientific computing.
-To achieve this we implemented PLASMA's \textit{DPOTRF} routine and measured the processing time of its execution on two, four, eight, sixteen, 32 and 48 cores. For time measuring we used the library PAPI [2].\\
+To achieve this we implemented PLASMA's \textit{DPOTRF} routine and measured the processing time of its execution on two, four, eight, sixteen, 32 and 48 cores. For time measuring we used the library PAPI~\cite{papi02}.\\
 All measurements were done on a system with an x86\_64 architecture, 48 CPUs, one thread per core, AMD Opteron\texttrademark{} Processor 6174 with a theoretical peak performance of 2200.00 MHz. Furthermore there are 8 NUMA nodes, which combine six cores per each node.
-In the end we compared PLASMA's \textit{DPOTRF} runtimes to the sequential cholesky decomposition implemented in LAPACK [3] and calculated absolute and relative speedups.
+Since it was not easy to found out how many instructions per cycle (IPC) this particular AMD processor can handle, we assumed that it is just as high as in similiar processors of AMD. In ~\cite{amd05} it says that the number of operations which the processor can handle in one cycle is four.
+In the end we compared PLASMA's \textit{DPOTRF} runtimes to the sequential cholesky decomposition implemented in LAPACK~\cite{lapack03} and calculated absolute and relative speedups.
 
 \section{Implementation}
-In order to build PLASMA we installed OpenBLAS [4] and LAPACK [3] from the latest stable releases.
+In order to build PLASMA we installed OpenBLAS~\cite{openblas04} and LAPACK~\cite{lapack03} from the latest stable releases.
 Since on our system is just one thread per core we built OpenBLAS single-threaded with \textit{MAKE USE\_THREAD=0}.
 To guarantee portability we decided to make a bash-script, which install every necessary library fully automatically and also auto-generate a Makefile, which compiles our \textit{main.c} programm.
 This is very useful, because anybody who is interested in this PLASMA scaling study can simply run this script with \textit{bash plasma\_lapack\_blas.sh}.
 After small adjustments of the generated template\_Makefile the user can compile the programm with \textit{make}.
 \\
-To verify a correct execution of the test programm we used valgrind -memcheck, which found no errors.
+To verify a correct execution of the test programm we used valgrind -memcheck, which found no errors.\\
+Since the cholesky decomposition is only possible for symmetric positive definite we generated diagonale dominant matrices, because they are always positive definite.
+\begin{lstlisting}
+void generateMatrix(double *A, int n) {
+
+	double random_number;
+	srand(time(NULL));
+
+	for (int j = 0; j < n; j++) {
+		for (int i=j; i<n; i++) {
+			random_number = ((double)rand() / ( (double)RAND_MAX ));
+			A[i*n+j] = random_number;
+			A[j*n+i] = random_number;
+		}
+	}
+
+	// make positive definite
+	for (int i=0; i<n; i++) {
+		A[i*n+i] += n;
+	}
+
+}
+\end{lstlisting}
+
+As you can see we simply added n to the diagonal entries, so the sum of the corresponding row elements is less than n. This guarantees that matrix A is positive definite.\\
+\ \\
+For time measurement itself we used \textit{PAPI\_flops()}.
+\begin{lstlisting}
+int measure_PLASMA_dpotrf(double* A, double* L, double* work, PLASMA_enum uplo, int n, int cores) {
+
+	error = PLASMA_Init(cores);
+	if(error != PLASMA_SUCCESS){
+		printf("{\"ERROR-TEXT"}\n", error, error);
+		exit(1);
+	}
+
+	PAPI_flops(&rtime, &ptime, &flpops, &mflops);
+	error = PLASMA_dpotrf(uplo, n, L, n);
+	PAPI_flops(&rtime, &ptime, &flpops, &mflops);
+
+	error = PLASMA_Finalize();
+	if(error != PLASMA_SUCCESS){
+		printf("{\"ERROR-TEXT\n", error, error);
+		exit(1);
+	}
+	
+	//these are just shortened code snippets
+}
+\end{lstlisting}
+\ \\
+To verify correctness of PLASMAs and LAPACKs decompositions we calculated residuals.
+We used the one-norm. The closer the results are to zero the better they are.\\
+formular:
+\(\frac{||L*L^T-A||_1}{||A||_1}\)
 
 
+\begin{lstlisting}
+double residual(double* L, double* A, double* work, int n) {
 
+	//make L lower triangular
+	for (int j=1; j<n; j++) {
+		for (int i=0; i<j; i++) {
+			L[j*n+i]=0;
+		}
+	}
+	// L L^t
+	PLASMA_dgemm(PlasmaNoTrans, PlasmaTrans, n, n, n, 1, L, n, L, n, 0, work, n);
+
+	// LL^t - A
+    	cblas_daxpy( n*n, -1, A, 1, work, 1 );
+
+	double o_value = PLASMA_dlange(PlasmaOneNorm, n, n, work, n);
+	double A_norm = PLASMA_dlange(PlasmaOneNorm, n, n, A, n);
+
+	return o_value/A_norm;
+
+}
+\end{lstlisting}
+Since there is no function in PLASMA, LAPACK or BLAS which can compute a matrix multiplication with two triangular matrices as an input we had to set the upper entries of the matrix L to zero.\\
+In the beginning of our implementation we used here BLAS and LAPACK functions, because we don't measure execution time of the residual calculation. When testing we recognized that the residual computation takes a lot of time and so we replaced all functions with the related PLASMA ones.\\
+This resulted in a far quicker execution.
 
 \section{Evaluation}
 Because the measurement was done on a shared system
@@ -61,7 +148,7 @@ those with 100\% certainty.
 \label{fig:runtime}
 	\end{subfigure}
 	\begin{subfigure}{0.4\textwidth}
-		\includegraphics[width=\textwidth]{rel_speedup}
+		\includegraphics[width=\textwidth]{relSpeedup}
 		\caption{Relative Speedup}
 \label{fig:rel}
 	\end{subfigure}
