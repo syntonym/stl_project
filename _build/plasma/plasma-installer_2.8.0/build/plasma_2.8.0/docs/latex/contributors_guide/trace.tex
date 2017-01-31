@@ -1,0 +1,287 @@
+%###################################################################################################
+
+\chapter{Traces in PLASMA}
+
+This chapter explains how generate execution traces within PLASMA and
+how to modify the library to add some informations in traces.
+In PLASMA, traces can be automatically generated to record all calls
+to coreblas functions with static scheduling as with dynamic
+scheduling. During execution a binary trace will be generated, that
+will be converted post-execution in the format of your choice: OTF, Tau or
+Paje.
+
+\section{Requirements}
+
+Traces in PLASMA relies on the {\sc EZTrace} 1library .0.6 or higher for tracing:
+\begin{description}
+  \item[{\sc EZTrace}:] EZTrace is a tool that aims at generating
+    automatically execution trace from HPC (High Performance Computing)
+    programs.\newline
+    \url{http://eztrace.gforge.inria.fr/}
+\end{description}
+
+Adding to this library, two others are optional regarding the
+trace format you want to generate:
+\begin{description}
+\item[{\sc OTF}:] OpenTraceFormat (OTF) is an API specification and
+  library implementation of a scalable trace file format, developed at
+  TU Dresden in partnership with ParaTools with funding from Lawrence
+  Livermore National Laboratory and released under the BSD open source
+  license. The intent of OTF is to provide an open source means of
+  efficiently reading and writing up to gigabytes of trace data from
+  thousands of processes.\newline
+  \url{http://www.tu-dresden.de/zih/otf}
+\item[{\sc TAU}:] Tuning and Analysis Utilities is a portable profiling
+  and tracing toolkit for performance analysis of parallel programs
+  written in Fortran, C, C++, Java, Python.\newline
+  {\bf Remark:} Tau is actually work in progress in GTG and can not be used
+  for now in PLASMA.\newline
+  \url{http://www.cs.uoregon.edu/research/tau/}
+\end{description}
+
+Different visualizers can be used to go through the traces:
+\begin{description}
+\item[{\sc ViTE}:] Visual Trace Explorer that is able to read Paje,
+  OTF and TAU format.\newline
+  \url{http://vite.gforge.inria.fr/}
+\item[{\sc Vampir}:] Vampir provides an easy to use analysis framework
+  which enables developers to quickly display program behavior at any
+  level of detail. Vampir reads the OTF format.\newline
+  \url{http://www.vampir.eu/}
+\end{description}
+
+\section{Usage}
+
+This section describes the different steps to generate traces, once
+the libraries have been installed and more expecially on x86\_64
+architectures available at ICL. We will consider in the following that
+the libraries have been installed in the directory: \texttt{/opt/eztrace}.
+
+\begin{enumerate}
+\item Install the {\sc EZTrace} library
+\item Be sure you have set up your environnment correctly, to have
+  access to the header files and libraries:
+\begin{verbatim}
+export EZTRACE_DIR=/opt/eztrace (Replace by your install directory)
+export PATH=$PATH:$EZTRACE_DIR/bin
+export LD_RUN_PATH=$LD_RUN_PATH:$EZTRACE_DIR/lib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$EZTRACE_DIR/lib
+export INCLUDE_PATH=$INCLUDE_PATH:$EZTRACE_DIR/include
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$EZTRACE_DIR/lib/pkg_config
+\end{verbatim}
+
+On ICL clusters, you can directly use the following command:
+\begin{verbatim}
+source /home/mfaverge/trace/opt/trace_env.sh
+\end{verbatim}
+
+\item Then you need to update your \texttt{make.inc}, to compile {\sc
+  PLASMA} with the trace support. For that, add the following lines:
+\begin{verbatim}
+PLASMA_TRACE = 1
+EZT_DIR = $EZTRACE_DIR
+\end{verbatim}
+
+On ICL clusters, you can use:
+\begin{verbatim}
+EZT_DIR = /home/mfaverge/trace/opt
+\end{verbatim}
+
+\item You can also specify, if you want to trace by elementary kernel
+  (\verb+-DTRACE_BY_KERNEL+), or trace by global function applied on
+  all the matrix (\verb+-DTRACE_BY_FUNCTION+) by adding the option to
+  the \verb+CFLAGS+ in  \texttt{make.inc}. The default, when the
+  traces are enabled, is to trace by kernel.
+  Note that this options affect only the tracing with dynamic
+  scheduler. The static scheduler can only be traced by kernel.
+
+\item Compile and/or link your program. Don't forget to clean before,
+  if you already had compiled {\sc PLASMA}.
+
+\item Run the test/timing as usual with the additional \verb+--trace+ option:
+\begin{verbatim}
+% ./time_dpotrf --n_range=1000:1000:1 --trace
+Starting EZTrace... done
+#   N NRHS threads seconds   Gflop/s Deviation
+ 1000    1    16     0.018     18.18      0.00
+Stopping EZTrace... saving trace  /tmp/mfaverge_eztrace_log_rank_1
+\end{verbatim}
+
+\item You now need to convert the binary file generated during the
+  execution in one format
+  readable by your preferred visualizer. Firstly, you need to specify
+  where to find the library to interpret the events generated during
+  the execution.
+\begin{verbatim}
+export EZTRACE_LIBRARY_PATH=$PLASMA_DIR/lib
+\end{verbatim}
+
+Secondly, you can convert your file with EZTrace (see EZtrace
+documentation for more information):
+\begin{verbatim}
+% eztrace_convert -t PAJE -o potrf /tmp/mfaverge_eztrace_log_rank_1
+\end{verbatim}
+
+\end{enumerate}
+
+
+\subsection{FAQ}
+\begin{itemize}
+\item \textit{My traces are unreadable and contain too many events. How can I
+  limit the events to coreblas functions?}\newline
+
+  EZTrace allows you to produce events for many different modules
+  like PThread, OpenMP or MPI. The available modules can be listed
+  with the following command:
+\begin{verbatim}
+% eztrace_avail
+1       omp      Module for OpenMP parallel regions
+2       pthread  Module for PThread synchronization functions
+                 (mutex, semaphore, spinlock, etc.)
+3       stdio    Module for stdio functions
+                 (read, write, select, poll, etc.)
+4       mpi      Module for MPI functions
+5       memory   Module for memory functions
+                 (malloc, free, etc.)
+16	coreblas Module for kernels used in PLASMA
+                 (BLAS, LAPACK and coreblas)
+\end{verbatim}
+
+And the modules loaded at runtime are listed by:
+\begin{verbatim}
+% eztrace_loaded
+5	memory   Module for memory functions
+                 (malloc, free, etc.)
+2	pthread  Module for PThread synchronization functions
+                 (mutex, semaphore, spinlock, etc.)
+\end{verbatim}
+
+To enable \texttt{coreblas} module, you need to add coreblas to the
+subset of modules you want to enable through the environment variable
+\texttt{EZTRACE\_TRACE}.
+For PLASMA, the most common use will be:
+\begin{verbatim}
+export EZTRACE_TRACE="coreblas"
+\end{verbatim}
+If you are using Quark-D, you might want to enable the MPI module:
+\begin{verbatim}
+export EZTRACE_TRACE="mpi coreblas"
+\end{verbatim}
+
+Once you have set \texttt{EZTRACE\_TRACE}, you can check the modules
+are loaded correctly:
+
+\begin{verbatim}
+% eztrace_loaded
+4       mpi      Module for MPI functions
+16      coreblas Module for kernels used in PLASMA
+                 (BLAS, LAPACK and coreblas)
+\end{verbatim}
+
+\textbf{Remark:} This environment variable can be set to different
+values for execution time and at conversion time. This means, you can
+enable all available modules while running your application, and then
+change the value to extract only one subset of the information.
+
+\item \textit{How can I change the output directory?}\newline
+  By default, the generated file in \texttt{/tmp} directory with the
+  name \texttt{username\_eztrace\_log\_rankX} where username is
+  replaced by your username, and X by the rank number of the MPI process.
+  The directory where output is stored can be changed with the
+  following line:
+\begin{verbatim}
+export EZTRACE_TRACE_DIR=$HOME/traces
+\end{verbatim}
+
+\item \textit{I'm using multiple sequence to submit my function calls,
+  and I would like to trace by sequence?}\newline
+
+  This is automatically done when running with the dynamic
+  scheduler. Just run the following command when you generate the trace:
+\begin{verbatim}
+% PLASMA_TRACE_SEQUENCE=1 eztrace_convert -o potrf \
+    /tmp/mfaverge_eztrace_log_rank_1
+\end{verbatim}
+\end{itemize}
+
+\section{How to add a kernel?}
+
+All kernels present in the core\_blas directory are automatically
+added to the module through a script. Here are a few rules to follow
+and explanations on the module extension if you want to enable or
+disable tracing of new kernels.
+
+\subsection{Enable tracing on a kernel}
+
+Traces within PLASMA are using the \emph{weak symbols} that might be
+provided by the compiler. Those symbols allows us to give aliases to
+our functions that can be overloaded at link time if it is statically
+linked, or at runtime is shared library are generated. So, if you want
+to add one kernel to the \textsc{EZTrace} coreblas module, you will
+have to define this symbol as shown in the following example for
+\texttt{CORE\_zgemm}. If used, \texttt{CORE\_zgemm} becomes the traced
+call, and \texttt{PCORE\_zgemm} becomes the original function with no
+tracing information.
+
+\begin{verbatim}
+#if defined(PLASMA_HAVE_WEAK)
+#pragma weak CORE_zgemm = PCORE_zgemm
+#define CORE_zgemm PCORE_zgemm
+#endif
+void CORE_zgemm(...) {
+  ...
+}
+\end{verbatim}
+
+The second important point here is that you will need to keep the
+return type on the same line than the CORE\_z name of the function,
+otherwise the script that generates automatically the new version of
+\texttt{CORE\_zgemm} with tracing information will skip this function.
+
+\subsection{Disable tracing on a kernel}
+
+To disable tracing on one kernel, \emph{weak symbol} need to be
+removed, and return type of the function has to be on previous line as
+shown in following example with \texttt{CORE\_zparfb}:
+\begin{verbatim}
+int
+CORE_zparfb(...) {
+  ...
+}
+\end{verbatim}
+
+\subsection{Automatic generation}
+
+The script \texttt{tools/convert2eztrace.pl} is \emph{simple and stupid} perl script that
+needs a lot of improvement for sure, but which does the basic work. So
+if you want to improve it, you are more than welcome to do so, and to
+update this documentation.
+That being said, the script has to be run in the \texttt{core\_blas}
+directory and nowhere else. It will parse all \texttt{core\_z*.c}
+files to search for functions that needs to be traced and directly
+update the \texttt{core\_blas-eztrace/coreblas\_z.c} file.
+
+\textbf{Important:} Once you ran the script, check for the diff on
+this file before any commit.
+
+Here are a few small things to know about it:
+\begin{itemize}
+\item the list of files parse is defined at the beginning of the
+  script by the following command:
+\begin{verbatim}
+my @files  = `ls -1 core_z*.c core_dzasum.c`;
+\end{verbatim}
+If you file is not part of this list, it won't be parse.
+
+\item Functions which are available only in complex cases as
+  \texttt{hemm}, \texttt{herk}, \dots, needs to be protected to avoid
+  double declaration in real cases. The list of those files is defined
+  in the \texttt{complexlist} variable at the beginning of the script.
+
+\item You might not want your file to be parse by the script even if
+  it matches the \texttt{core\_z*.c} expressions. The variable
+  \texttt{avoidlist} contains the list of those files.
+
+\end{itemize}
+
+%###################################################################################################

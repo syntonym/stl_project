@@ -1,0 +1,125 @@
+\hypertarget{structplasma__desc__t}{}\section{plasma\+\_\+desc\+\_\+t Struct Reference}
+\label{structplasma__desc__t}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+
+
+{\ttfamily \#include $<$descriptor.\+h$>$}
+
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \hyperlink{structplasma__desc__t_abcec2c322f8d2461e8afa6c0e7f52220_abcec2c322f8d2461e8afa6c0e7f52220}{mat}
+\item 
+size\+\_\+t \hyperlink{structplasma__desc__t_a9749348dffa9c3584312c581f4c2bc20_a9749348dffa9c3584312c581f4c2bc20}{A21}
+\item 
+size\+\_\+t \hyperlink{structplasma__desc__t_a5081e56a01179e8b9305912676909a13_a5081e56a01179e8b9305912676909a13}{A12}
+\item 
+size\+\_\+t \hyperlink{structplasma__desc__t_ad8485dcb9895aee64a447c70642cb554_ad8485dcb9895aee64a447c70642cb554}{A22}
+\item 
+P\+L\+A\+S\+M\+A\+\_\+enum \hyperlink{structplasma__desc__t_ae3456ab5010805f78b76debb9b3ec2b3_ae3456ab5010805f78b76debb9b3ec2b3}{dtyp}
+\item 
+int \hyperlink{structplasma__desc__t_a8512ed221aec5b7db0e31d02acc5b5c7_a8512ed221aec5b7db0e31d02acc5b5c7}{mb}
+\item 
+int \hyperlink{structplasma__desc__t_af3770d8c57330e1e22a149f46cddb272_af3770d8c57330e1e22a149f46cddb272}{nb}
+\item 
+int \hyperlink{structplasma__desc__t_a9611b974738f4accbb79e366fdcba787_a9611b974738f4accbb79e366fdcba787}{bsiz}
+\item 
+int \hyperlink{structplasma__desc__t_a20df9ed35d79a68537e991794ed16c1f_a20df9ed35d79a68537e991794ed16c1f}{lm}
+\item 
+int \hyperlink{structplasma__desc__t_a0deb48b03bc6427bdd3770aeea1d5f36_a0deb48b03bc6427bdd3770aeea1d5f36}{ln}
+\item 
+int \hyperlink{structplasma__desc__t_abcef9d7944f3e6a79a1140389a5c887d_abcef9d7944f3e6a79a1140389a5c887d}{lm1}
+\item 
+int \hyperlink{structplasma__desc__t_a4e8774165bf4ec4a438b46148bf18c7e_a4e8774165bf4ec4a438b46148bf18c7e}{ln1}
+\item 
+int \hyperlink{structplasma__desc__t_a6c43b11d26b88311906eab54db5d1ad2_a6c43b11d26b88311906eab54db5d1ad2}{lmt}
+\item 
+int \hyperlink{structplasma__desc__t_a47634188eab194b20f78b8c2c32e9582_a47634188eab194b20f78b8c2c32e9582}{lnt}
+\item 
+int \hyperlink{structplasma__desc__t_a7508194cedb3083d9152c4e2f957dc88_a7508194cedb3083d9152c4e2f957dc88}{i}
+\item 
+int \hyperlink{structplasma__desc__t_a1d5e8aa30ce545ac2d9c2e75e201e976_a1d5e8aa30ce545ac2d9c2e75e201e976}{j}
+\item 
+int \hyperlink{structplasma__desc__t_a7f9b40af027da0a8f9af989794f31a8a_a7f9b40af027da0a8f9af989794f31a8a}{m}
+\item 
+int \hyperlink{structplasma__desc__t_a1deb8d67b1fca78449a40ba7a056cafd_a1deb8d67b1fca78449a40ba7a056cafd}{n}
+\item 
+int \hyperlink{structplasma__desc__t_a35d0d7ad5f5927bb551a357a174152c2_a35d0d7ad5f5927bb551a357a174152c2}{mt}
+\item 
+int \hyperlink{structplasma__desc__t_a7595a9db8b1b8360b5fa9726b998a117_a7595a9db8b1b8360b5fa9726b998a117}{nt}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+ Tile matrix descriptor
+
+Matrices are stored in a contiguous data chunk containing in order A11, A21, A12, A22 with \+: \begin{DoxyVerb}     n1      n2
++----------+---+
+|          |   |    With m1 = lm - (lm%mb)
+|          |   |         m2 = lm%mb
+\end{DoxyVerb}
+ m1 $\vert$ A11 $\vert$\+A12$\vert$ n1 = ln -\/ (lnnb) $\vert$ $\vert$ $\vert$ n2 = lnnb $\vert$ $\vert$ $\vert$ +-\/-\/-\/-\/-\/-\/-\/---+---+ m2 $\vert$ A21 $\vert$\+A22$\vert$ +-\/-\/-\/-\/-\/-\/-\/---+---+ 
+
+\subsection{Field Documentation}
+\hypertarget{structplasma__desc__t_a5081e56a01179e8b9305912676909a13_a5081e56a01179e8b9305912676909a13}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!A12@{A12}}
+\index{A12@{A12}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{A12}]{\setlength{\rightskip}{0pt plus 5cm}size\+\_\+t plasma\+\_\+desc\+\_\+t\+::\+A12}\label{structplasma__desc__t_a5081e56a01179e8b9305912676909a13_a5081e56a01179e8b9305912676909a13}
+pointer to the beginning of the matrix A12 \hypertarget{structplasma__desc__t_a9749348dffa9c3584312c581f4c2bc20_a9749348dffa9c3584312c581f4c2bc20}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!A21@{A21}}
+\index{A21@{A21}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{A21}]{\setlength{\rightskip}{0pt plus 5cm}size\+\_\+t plasma\+\_\+desc\+\_\+t\+::\+A21}\label{structplasma__desc__t_a9749348dffa9c3584312c581f4c2bc20_a9749348dffa9c3584312c581f4c2bc20}
+pointer to the beginning of the matrix A21 \hypertarget{structplasma__desc__t_ad8485dcb9895aee64a447c70642cb554_ad8485dcb9895aee64a447c70642cb554}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!A22@{A22}}
+\index{A22@{A22}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{A22}]{\setlength{\rightskip}{0pt plus 5cm}size\+\_\+t plasma\+\_\+desc\+\_\+t\+::\+A22}\label{structplasma__desc__t_ad8485dcb9895aee64a447c70642cb554_ad8485dcb9895aee64a447c70642cb554}
+pointer to the beginning of the matrix A22 \hypertarget{structplasma__desc__t_a9611b974738f4accbb79e366fdcba787_a9611b974738f4accbb79e366fdcba787}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!bsiz@{bsiz}}
+\index{bsiz@{bsiz}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{bsiz}]{\setlength{\rightskip}{0pt plus 5cm}int plasma\+\_\+desc\+\_\+t\+::bsiz}\label{structplasma__desc__t_a9611b974738f4accbb79e366fdcba787_a9611b974738f4accbb79e366fdcba787}
+size in elements including padding \hypertarget{structplasma__desc__t_ae3456ab5010805f78b76debb9b3ec2b3_ae3456ab5010805f78b76debb9b3ec2b3}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!dtyp@{dtyp}}
+\index{dtyp@{dtyp}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{dtyp}]{\setlength{\rightskip}{0pt plus 5cm}P\+L\+A\+S\+M\+A\+\_\+enum plasma\+\_\+desc\+\_\+t\+::dtyp}\label{structplasma__desc__t_ae3456ab5010805f78b76debb9b3ec2b3_ae3456ab5010805f78b76debb9b3ec2b3}
+precision of the matrix \hypertarget{structplasma__desc__t_a7508194cedb3083d9152c4e2f957dc88_a7508194cedb3083d9152c4e2f957dc88}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!i@{i}}
+\index{i@{i}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{i}]{\setlength{\rightskip}{0pt plus 5cm}int plasma\+\_\+desc\+\_\+t\+::i}\label{structplasma__desc__t_a7508194cedb3083d9152c4e2f957dc88_a7508194cedb3083d9152c4e2f957dc88}
+row index to the beginning of the submatrix \hypertarget{structplasma__desc__t_a1d5e8aa30ce545ac2d9c2e75e201e976_a1d5e8aa30ce545ac2d9c2e75e201e976}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!j@{j}}
+\index{j@{j}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{j}]{\setlength{\rightskip}{0pt plus 5cm}int plasma\+\_\+desc\+\_\+t\+::j}\label{structplasma__desc__t_a1d5e8aa30ce545ac2d9c2e75e201e976_a1d5e8aa30ce545ac2d9c2e75e201e976}
+column index to the beginning of the submatrix \hypertarget{structplasma__desc__t_a20df9ed35d79a68537e991794ed16c1f_a20df9ed35d79a68537e991794ed16c1f}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!lm@{lm}}
+\index{lm@{lm}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{lm}]{\setlength{\rightskip}{0pt plus 5cm}int plasma\+\_\+desc\+\_\+t\+::lm}\label{structplasma__desc__t_a20df9ed35d79a68537e991794ed16c1f_a20df9ed35d79a68537e991794ed16c1f}
+number of rows of the entire matrix \hypertarget{structplasma__desc__t_abcef9d7944f3e6a79a1140389a5c887d_abcef9d7944f3e6a79a1140389a5c887d}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!lm1@{lm1}}
+\index{lm1@{lm1}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{lm1}]{\setlength{\rightskip}{0pt plus 5cm}int plasma\+\_\+desc\+\_\+t\+::lm1}\label{structplasma__desc__t_abcef9d7944f3e6a79a1140389a5c887d_abcef9d7944f3e6a79a1140389a5c887d}
+number of tile rows of the A11 matrix -\/ derived parameter \hypertarget{structplasma__desc__t_a6c43b11d26b88311906eab54db5d1ad2_a6c43b11d26b88311906eab54db5d1ad2}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!lmt@{lmt}}
+\index{lmt@{lmt}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{lmt}]{\setlength{\rightskip}{0pt plus 5cm}int plasma\+\_\+desc\+\_\+t\+::lmt}\label{structplasma__desc__t_a6c43b11d26b88311906eab54db5d1ad2_a6c43b11d26b88311906eab54db5d1ad2}
+number of tile rows of the entire matrix -\/ derived parameter \hypertarget{structplasma__desc__t_a0deb48b03bc6427bdd3770aeea1d5f36_a0deb48b03bc6427bdd3770aeea1d5f36}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!ln@{ln}}
+\index{ln@{ln}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{ln}]{\setlength{\rightskip}{0pt plus 5cm}int plasma\+\_\+desc\+\_\+t\+::ln}\label{structplasma__desc__t_a0deb48b03bc6427bdd3770aeea1d5f36_a0deb48b03bc6427bdd3770aeea1d5f36}
+number of columns of the entire matrix \hypertarget{structplasma__desc__t_a4e8774165bf4ec4a438b46148bf18c7e_a4e8774165bf4ec4a438b46148bf18c7e}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!ln1@{ln1}}
+\index{ln1@{ln1}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{ln1}]{\setlength{\rightskip}{0pt plus 5cm}int plasma\+\_\+desc\+\_\+t\+::ln1}\label{structplasma__desc__t_a4e8774165bf4ec4a438b46148bf18c7e_a4e8774165bf4ec4a438b46148bf18c7e}
+number of tile columns of the A11 matrix -\/ derived parameter \hypertarget{structplasma__desc__t_a47634188eab194b20f78b8c2c32e9582_a47634188eab194b20f78b8c2c32e9582}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!lnt@{lnt}}
+\index{lnt@{lnt}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{lnt}]{\setlength{\rightskip}{0pt plus 5cm}int plasma\+\_\+desc\+\_\+t\+::lnt}\label{structplasma__desc__t_a47634188eab194b20f78b8c2c32e9582_a47634188eab194b20f78b8c2c32e9582}
+number of tile columns of the entire matrix -\/ derived parameter \hypertarget{structplasma__desc__t_a7f9b40af027da0a8f9af989794f31a8a_a7f9b40af027da0a8f9af989794f31a8a}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!m@{m}}
+\index{m@{m}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{m}]{\setlength{\rightskip}{0pt plus 5cm}int plasma\+\_\+desc\+\_\+t\+::m}\label{structplasma__desc__t_a7f9b40af027da0a8f9af989794f31a8a_a7f9b40af027da0a8f9af989794f31a8a}
+number of rows of the submatrix \hypertarget{structplasma__desc__t_abcec2c322f8d2461e8afa6c0e7f52220_abcec2c322f8d2461e8afa6c0e7f52220}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!mat@{mat}}
+\index{mat@{mat}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{mat}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ plasma\+\_\+desc\+\_\+t\+::mat}\label{structplasma__desc__t_abcec2c322f8d2461e8afa6c0e7f52220_abcec2c322f8d2461e8afa6c0e7f52220}
+pointer to the beginning of the matrix \hypertarget{structplasma__desc__t_a8512ed221aec5b7db0e31d02acc5b5c7_a8512ed221aec5b7db0e31d02acc5b5c7}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!mb@{mb}}
+\index{mb@{mb}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{mb}]{\setlength{\rightskip}{0pt plus 5cm}int plasma\+\_\+desc\+\_\+t\+::mb}\label{structplasma__desc__t_a8512ed221aec5b7db0e31d02acc5b5c7_a8512ed221aec5b7db0e31d02acc5b5c7}
+number of rows in a tile \hypertarget{structplasma__desc__t_a35d0d7ad5f5927bb551a357a174152c2_a35d0d7ad5f5927bb551a357a174152c2}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!mt@{mt}}
+\index{mt@{mt}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{mt}]{\setlength{\rightskip}{0pt plus 5cm}int plasma\+\_\+desc\+\_\+t\+::mt}\label{structplasma__desc__t_a35d0d7ad5f5927bb551a357a174152c2_a35d0d7ad5f5927bb551a357a174152c2}
+number of tile rows of the submatrix -\/ derived parameter \hypertarget{structplasma__desc__t_a1deb8d67b1fca78449a40ba7a056cafd_a1deb8d67b1fca78449a40ba7a056cafd}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!n@{n}}
+\index{n@{n}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{n}]{\setlength{\rightskip}{0pt plus 5cm}int plasma\+\_\+desc\+\_\+t\+::n}\label{structplasma__desc__t_a1deb8d67b1fca78449a40ba7a056cafd_a1deb8d67b1fca78449a40ba7a056cafd}
+number of columns of the submatrix \hypertarget{structplasma__desc__t_af3770d8c57330e1e22a149f46cddb272_af3770d8c57330e1e22a149f46cddb272}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!nb@{nb}}
+\index{nb@{nb}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{nb}]{\setlength{\rightskip}{0pt plus 5cm}int plasma\+\_\+desc\+\_\+t\+::nb}\label{structplasma__desc__t_af3770d8c57330e1e22a149f46cddb272_af3770d8c57330e1e22a149f46cddb272}
+number of columns in a tile \hypertarget{structplasma__desc__t_a7595a9db8b1b8360b5fa9726b998a117_a7595a9db8b1b8360b5fa9726b998a117}{}\index{plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}!nt@{nt}}
+\index{nt@{nt}!plasma\+\_\+desc\+\_\+t@{plasma\+\_\+desc\+\_\+t}}
+\subsubsection[{nt}]{\setlength{\rightskip}{0pt plus 5cm}int plasma\+\_\+desc\+\_\+t\+::nt}\label{structplasma__desc__t_a7595a9db8b1b8360b5fa9726b998a117_a7595a9db8b1b8360b5fa9726b998a117}
+number of tile columns of the submatrix -\/ derived parameter 

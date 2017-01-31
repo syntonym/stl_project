@@ -1,0 +1,132 @@
+\section*{P\+L\+A\+S\+M\+A R\+E\+A\+D\+M\+E }
+
+Univ. of Tennessee, Univ. of California Berkeley and Univ. of Colorado Denver \begin{DoxyVerb} __________ ____       _____    _________   _____      _____
+ \______   \    |     /  _  \  /   _____/  /     \    /  _  \
+  |     ___/    |    /  /_\  \ \_____  \  /  \ /  \  /  /_\  \
+  |    |   |    |___/    |    \/        \/    Y    \/    |    \
+  |____|   |_______ \____|__  /_______  /\____|__  /\____|__  /
+                   \/       \/        \/         \/         \/
+\end{DoxyVerb}
+
+
+Parallel Linear Algebra Software for Multicore Architectures
+
+\href{http://icl.cs.utk.edu/plasma/}{\tt http\+://icl.\+cs.\+utk.\+edu/plasma/}
+
+\subsection*{Purpose of P\+L\+A\+S\+M\+A }
+
+The main purpose of P\+L\+A\+S\+M\+A is to address the performance shortcomings of the \href{http://www.netlib.org/lapack/}{\tt http\+://www.\+netlib.\+org/lapack/}\mbox{[}L\+A\+P\+A\+C\+K\mbox{]} and \href{http://www.netlib.org/scalapack/}{\tt http\+://www.\+netlib.\+org/scalapack/}\mbox{[}Sca\+L\+A\+P\+A\+C\+K\mbox{]} libraries on multicore processors and multi-\/socket systems of multicore processors and their inability to efficiently utilize accelerators such as Graphics Processing Units (G\+P\+Us). P\+L\+A\+S\+M\+A provides routines to solve dense general systems of linear equations, symmetric positive definite systems of linear equations and linear least squares problems, using L\+U, Cholesky, Q\+R and L\+Q factorizations. Real arithmetic and complex arithmetic are supported in both single precision and double precision.
+
+P\+L\+A\+S\+M\+A has been designed to supercede L\+A\+P\+A\+C\+K and Sca\+L\+A\+P\+A\+C\+K, principally by restructuring the software to achieve much greater efficiency, where possible, on modern computers based on multicore processors. P\+L\+A\+S\+M\+A also relies on new or improved algorithms. Currently, however, P\+L\+A\+S\+M\+A does not serve as a complete replacement of L\+A\+P\+A\+C\+K due to limited functionality. Specifically, P\+L\+A\+S\+M\+A does not support band matrices and does not solve eigenvalue and singular value problems. Also, P\+L\+A\+S\+M\+A does not replace Sca\+L\+A\+P\+A\+C\+K as software for distributed memory computers, since it only supports shared-\/memory machines.
+
+\subsection*{Where to Find More Information }
+
+The main repository for P\+L\+A\+S\+M\+A documentation is the distribution ./docs directory. The directory contains important documents such as the Users\textquotesingle{} Guide and the Reference Manual. P\+L\+A\+S\+M\+A documentation is also available online on the P\+L\+A\+S\+M\+A website\+: \href{http://icl.cs.utk.edu/plasma/}{\tt http\+://icl.\+cs.\+utk.\+edu/plasma/}. For installation instructions please refer to the \href{http://icl.cs.utk.edu/projectsfiles/plasma/html/InstallationGuide.html}{\tt http\+://icl.\+cs.\+utk.\+edu/projectsfiles/plasma/html/\+Installation\+Guide.\+html}\mbox{[}Installation Guide\mbox{]}. In addition, the \href{http://icl.cs.utk.edu/plasma/forum/}{\tt http\+://icl.\+cs.\+utk.\+edu/plasma/forum/}\mbox{[}P\+L\+A\+S\+M\+A User Forum\mbox{]} can be used to post general questions and comments as well as to report technical problems.
+
+\subsection*{Important Information about B\+L\+A\+S and L\+A\+P\+A\+C\+K }
+
+=== Optimized B\+L\+A\+S are Critical for Performance ===
+
+It is absolutely critical for performance to use P\+L\+A\+S\+M\+A in conjunction with an optimized implementation of the Basic Linear Algebra Subroutines (B\+L\+A\+S) library. Such implementations are usually provided by the processor manufacturer and are usually available free of charge for non-\/profit use, such as academic research. Examples include\+:
+
+The Vec\+Lib from Apple, The A\+M\+D Core Math Library (A\+C\+M\+L), The Math Kernel Library (M\+K\+L) from Intel, The Engineering and Scientific Software Library (E\+S\+S\+L) from I\+B\+M.
+
+Open-\/source alternatives also exist, such as\+:
+
+\href{http://web.tacc.utexas.edu/~kgoto/}{\tt http\+://web.\+tacc.\+utexas.\+edu/$\sim$kgoto/}\mbox{[}Goto B\+L\+A\+S\mbox{]}, \href{http://math-atlas.sourceforge.net/}{\tt http\+://math-\/atlas.\+sourceforge.\+net/}\mbox{[}Automatically Tuned Linear Algebra Software (A\+T\+L\+A\+S)\mbox{]}.
+
+As the last resort, the F\+O\+R\+T\+R\+A\+N implementation of B\+L\+A\+S from \href{http://www.netlib.org/blas/}{\tt http\+://www.\+netlib.\+org/blas/}\mbox{[}Netlib\mbox{]} can be used (often referred to as {\itshape reference B\+L\+A\+S}). However, since Netlib B\+L\+A\+S are completely unoptimized, P\+L\+A\+S\+M\+A with Netlib B\+L\+A\+S will deliver correct numerical results, but no performance whatsoever.
+
+For comprehensive installation instructions please refer to the \href{http://icl.cs.utk.edu/projectsfiles/plasma/html/InstallationGuide.html}{\tt http\+://icl.\+cs.\+utk.\+edu/projectsfiles/plasma/html/\+Installation\+Guide.\+html}\mbox{[}Installation Guide\mbox{]}. However, if you decide to install manually and edit the installation scripts then there is one important issue to keep in mind. Modern optimized B\+L\+A\+S are not stand-\/alone libraries but instead are bundled with additional software, primarily L\+A\+P\+A\+C\+K. This makes it necessary to use proper linking flags. Commonly these are -\/\+L (for path to library) and -\/l (for library name)\+:
+
+-\/\+L/usr/lib -\/lblas
+
+This will only pull in symbols from the B\+L\+A\+S library that are needed by P\+L\+A\+S\+M\+A. The commonly made mistake is to just specify the full path to the library\+:
+
+/usr/lib/libblas.a
+
+This method will work for simple cases but it forces the linker to include the whole contents of the B\+L\+A\+S library rather than just pull in the missing symbols. Aside from making the binary executable files larger, this method will easily cause name clashes as the same symbol name might be included multiple times.
+
+=== Multithreading within B\+L\+A\+S Must be Disabled ===
+
+Many Basic Linear Algebra Subroutines (B\+L\+A\+S) implementations exploit parallelism within B\+L\+A\+S through multithreading. P\+L\+A\+S\+M\+A, however, utilizes B\+L\+A\+S for high performance implementations of single-\/core operations (often referred to as {\itshape kernels}) and exploits parallelism at the algorithmic level above the level of B\+L\+A\+S. For that reason, P\+L\+A\+S\+M\+A should not be used in conjunction with a multithreaded B\+L\+A\+S, as this is likely to create more execution threads than actual cores. The phenomenon, known as oversubscribing of cores, will completely annihilate P\+L\+A\+S\+M\+A\textquotesingle{}s performance due to devastating impact on the operation of cache memories for dense linear algebra workloads.
+
+However, new eigenvalues and singular values are exploiting both sequential B\+L\+A\+S routines for reduction algorithms and multithreaded calls for eigenvalues, singular values solvers to provide good performance.
+
+For that reason, P\+L\+A\+S\+M\+A needs to be linked with a multithreaded B\+L\+A\+S library and to be informed of the library used to be able to adjust the number of threads according to the L\+A\+P\+A\+C\+K/\+B\+L\+A\+S routine called, and by default the number of thread should be one. Typically, disabling the multithreading can be done by setting the appropriate environment variable from the command prompt, for instance\+:
+
+export O\+M\+P\+\_\+\+N\+U\+M\+\_\+\+T\+H\+R\+E\+A\+D\+S=1 export M\+K\+L\+\_\+\+N\+U\+M\+\_\+\+T\+H\+R\+E\+A\+D\+S=1 export G\+O\+T\+O\+\_\+\+N\+U\+M\+\_\+\+T\+H\+R\+E\+A\+D\+S=1 export V\+E\+C\+L\+I\+B\+\_\+\+M\+A\+X\+I\+M\+U\+M\+\_\+\+T\+H\+R\+E\+A\+D\+S=1
+
+In order to let P\+L\+A\+S\+M\+A switch automatically the number of threads in the proper section, it is required to specify which B\+L\+A\+S library is used in the make.\+inc file by either adding -\/\+D\+P\+L\+A\+S\+M\+A\+\_\+\+W\+I\+T\+H\+\_\+\+M\+K\+L or -\/\+D\+P\+L\+A\+S\+M\+A\+\_\+\+W\+I\+T\+H\+\_\+\+A\+C\+M\+L to the compilation flags (C\+F\+L\+A\+G\+S). Then, P\+L\+A\+S\+M\+A will change the number of threads by calling respectively, omp\+\_\+num\+\_\+threads() or mkl\+\_\+num\+\_\+threads(). It is important to note that with M\+K\+L, P\+L\+A\+S\+M\+A has to disable the affinity of the Intel Open\+M\+P scheduler by calling\+: kmp\+\_\+set\+\_\+defaults(\char`\"{}\+K\+M\+P\+\_\+\+A\+F\+F\+I\+N\+I\+T\+Y=disabled\char`\"{})
+
+Currently, this disables the simultaneous use of P\+L\+A\+S\+M\+A for some of the user\textquotesingle{}s functions and vendor B\+L\+A\+S for others. This cannot be easily remedied without standardization of interoperability rules of multithreaded libraries. One consolation is that P\+L\+A\+S\+M\+A already delivers fast parallel implementations of all Level 3 B\+L\+A\+S routines and there is virtually no benefit from parallelization of Level 1 and 2 B\+L\+A\+S routines on current generation of multicore platforms due to memory contention.
+
+=== P\+L\+A\+S\+M\+A Software Stack ===
+
+P\+L\+A\+S\+M\+A requires the following software packages to be installed in the system prior to P\+L\+A\+S\+M\+A\textquotesingle{}s installation\+: B\+L\+A\+S, C\+B\+L\+A\+S, L\+A\+P\+A\+C\+K and Netlib L\+A\+P\+A\+C\+K C Wrapper. C\+B\+L\+A\+S and the components of L\+A\+P\+A\+C\+K required by P\+L\+A\+S\+M\+A are commonly bundled with B\+L\+A\+S. If this is not the case Netlib implementation of C\+B\+L\+A\+S and Netlib L\+A\+P\+A\+C\+K can be used. The C interface to L\+A\+P\+A\+C\+K has not been standardized yet and the L\+A\+P\+A\+C\+K C Wrapper from Netlib has to be used for the time being.
+
+B\+L\+A\+S is the set of Basic Linear Algebra Subprograms described in the previous section. An unoptimized reference implementation of B\+L\+A\+S is available from Netlib at \href{http://www.netlib.org/blas/}{\tt http\+://www.\+netlib.\+org/blas/}\mbox{[}\href{http://www.netlib.org/blas/}{\tt http\+://www.\+netlib.\+org/blas/}\mbox{]}. As mentioned before, it is critical for performance that optimized implementation of B\+L\+A\+S is used instead of Netlib B\+L\+A\+S.
+
+C\+B\+L\+A\+S is the C language interface to B\+L\+A\+S available with most implementations of B\+L\+A\+S. A reference implementation from Netlib is also available at \href{http://www.netlib.org/blas/blast-forum/cblas.tgz}{\tt http\+://www.\+netlib.\+org/blas/blast-\/forum/cblas.\+tgz}\mbox{[}\href{http://www.netlib.org/blas/blast-forum/cblas.tgz}{\tt http\+://www.\+netlib.\+org/blas/blast-\/forum/cblas.\+tgz}\mbox{]}. Since C\+B\+L\+A\+S is only a set of wrappers to the actual B\+L\+A\+S, the C\+B\+L\+A\+S from Netlib can be used without any adverse effects on performance.
+
+L\+A\+P\+A\+C\+K is a large package of linear algebra routines for a wide range of problems. P\+L\+A\+S\+M\+A uses only a tiny portion of L\+A\+P\+A\+C\+K, which is also commonly bundled with B\+L\+A\+S distributions. If this is not the case, the complete L\+A\+P\+A\+C\+K distribution from Netlib can be used, which is available at \href{http://www.netlib.org/lapack/}{\tt http\+://www.\+netlib.\+org/lapack/}\mbox{[}\href{http://www.netlib.org/lapack/}{\tt http\+://www.\+netlib.\+org/lapack/}\mbox{]}. Although vendor L\+A\+P\+A\+C\+K routines can be more optimized than those from Netlib, there should be no adverse performance effects of using Netlib L\+A\+P\+A\+C\+K, since P\+L\+A\+S\+M\+A only relies on L\+A\+P\+A\+C\+K for implementing some of its sequential kernels.
+
+The user can point P\+L\+A\+S\+M\+A\textquotesingle{}s installer to all the components already installed in the system. For all the missing components Netlib equivalents will be installed. The installer can also be forced to disregard any software already installed in the system and use the Netlib packages instead.
+
+=== Thou Shalt Not Mix Compilers ===
+
+For a given processor, the user can have different compilers at his disposal. For instance, G\+N\+U, P\+G\+I and Intel compilers are available for Intel processors. Different compilers can have slightly different Application Binary Interfaces (A\+B\+Is) and mixing compilers is generally a bad idea. User\textquotesingle{}s code and the P\+L\+A\+S\+M\+A library should be compiled with the same compiler, and so should be B\+L\+A\+S, C\+B\+L\+A\+S, L\+A\+P\+A\+C\+K and L\+A\+P\+A\+C\+K C Wrapper, if a source distribution is used. If a binary distribution of the B\+L\+A\+S is used, the correct version has to be chosen (the one providing the right A\+B\+I). For Intel processors, the \href{http://software.intel.com/en-us/articles/intel-mkl-link-line-advisor/}{\tt http\+://software.\+intel.\+com/en-\/us/articles/intel-\/mkl-\/link-\/line-\/advisor/}\mbox{[}Intel Math Kernel Library Link Line Advisor\mbox{]} can be used to assist with the choice.
+
+=== Linking F\+O\+R\+T\+R\+A\+N code with C Code ===
+
+Currently P\+L\+A\+S\+M\+A library does not contain any F\+O\+R\+T\+R\+A\+N code any more. F\+O\+R\+T\+R\+A\+N is only used in P\+L\+A\+S\+M\+A\textquotesingle{}s testing suite derived from the one of L\+A\+P\+A\+C\+K (/testing/lin/). Because of that, neither a F\+O\+R\+T\+R\+A\+N compiler nor the F\+O\+R\+T\+R\+A\+N standard library has to be involved in compiling P\+L\+A\+S\+M\+A and linking it with C code. The following paragraph is preserved in this R\+E\+A\+D\+M\+E only because it is a very useful piece of information for novice users who are forced to mix F\+O\+R\+T\+R\+A\+N and C.
+
+If F\+O\+R\+T\+R\+A\+N code is mixed with C code, the F\+O\+R\+T\+R\+A\+N standard library has to be included. Sometimes it can be accomplished by simply putting the standard F\+O\+R\+T\+R\+A\+N library at the and of the link line, e.\+g., \char`\"{}-\/lgfortran\char`\"{} when using G\+C\+C. Alternatively, F\+O\+R\+T\+R\+A\+N compiler can be used for linking. This will accomplish the same effect automatically. However, the Intel I\+F\+O\+R\+T compiler, when used for linking, assumes that the main program is in F\+O\+R\+T\+R\+A\+N and links {\itshape for\+\_\+main.\+o} into the application. This provides the linker with two main() functions (one created by the user and one inserted by the build system), which is cause a linker error. To prevent this from happening, the \char`\"{}-\/nofor\+\_\+main\char`\"{} link option has to be given.
+
+\subsection*{Fortran 90 Interfaces }
+
+It is now possible to call P\+L\+A\+S\+M\+A from modern Fortran, making use of the Fortran 2003 C interoperability features.
+
+The benefits of using the Fortran 90 interfaces over the old-\/style Fortran 77 interfaces are\+: Compile-\/time argument checking. Native and transparent handling of pointer arguments -\/ arrays, descriptors and handles. A clean interface between Fortran and C.
+
+In order to build the Fortran 90 interfaces add the following to your make.\+inc file\+: P\+L\+A\+S\+M\+A\+\_\+\+F90 = 1
+
+To call P\+L\+A\+S\+M\+A via the interfaces, \textquotesingle{}Use P\+L\+A\+S\+M\+A\textquotesingle{} in your Fortran code.
+
+Arguments such as descriptors and handles required by the P\+L\+A\+S\+M\+A tiled and asynchronous interfaces are passed as type(c\+\_\+ptr), which is part of the Fortran 2003 I\+S\+O C bingings module (so you will also need to \textquotesingle{}Use iso\+\_\+c\+\_\+binding\textquotesingle{}).
+
+For the L\+A\+P\+A\+C\+K-\/style interfaces, arrays should be passed in as normal.
+
+Four examples of using the Fortran 90 interfaces are given, which show how to use the module, call auxiliary functions such as initializing P\+L\+A\+S\+M\+A and setting options, perform tasks such as allocating workspace and translating between layouts, and calling a computational routine\+: example\+\_\+sgebrd.\+f90 -\/ single precision real bi-\/diagonal reduction using L\+A\+P\+A\+C\+K-\/syle interface. example\+\_\+dgetrs\+\_\+tile\+\_\+async.\+f90 -\/ double precision real factorizaion followed by linear solve using the tiled, asynchronous interface. example\+\_\+cgeqrf\+\_\+tile.\+f90 -\/ single precision complex Q\+R factorization using the tiled interface. example\+\_\+zgetrf\+\_\+tile.\+f90 -\/ double precision complex L\+U factorization using the tiled interface.
+
+The interfaces can be found in the \textquotesingle{}control\textquotesingle{} directory\+:
+
+plasma\+\_\+f90.\+f90 plasma\+\_\+cf90.\+F90 plasma\+\_\+df90.\+F90 plasma\+\_\+dsf90.\+F90 plasma\+\_\+sf90.\+F90 plasma\+\_\+zcf90.\+F90 plasma\+\_\+zf90.\+F90
+
+Please check the subroutine wrappers (following the \textquotesingle{}contains\textquotesingle{} statement in each module) to see the interfaces for the routines to call from your Fortran.
+
+\subsection*{A Note on Running on N\+U\+M\+A Systems }
+
+P\+L\+A\+S\+M\+A is a software package for shared memory systems, both Symmetric Multi-\/\+Processors (S\+M\+P) and Non-\/\+Uniform Memory Access (N\+U\+M\+A) systems. P\+L\+A\+S\+M\+A does not detect the type of the system and does not take any specific actions in that respect. P\+L\+A\+S\+M\+A\textquotesingle{}s performance may be poor on N\+U\+M\+A systems if matrices are not distributed among multiple memory nodes. The current wisdom is to use \char`\"{}numactl -\/-\/interleave=all\char`\"{} when running an application that uses P\+L\+A\+S\+M\+A.
+
+\subsection*{A Note on Running P\+L\+A\+S\+M\+A and Open\+M\+P }
+
+P\+L\+A\+S\+M\+A currently binds the existing threads to specific cores in order to optimize data locality during computation. As a consequence, if you add your first Open\+M\+P section after the call to P\+L\+A\+S\+M\+A\+\_\+\+Init, all threads created by the Open\+M\+P section will be sons of the main thread binded on the core 0 and will thus be binded on the same core. To avoid this problem, it is recommended to first have an Open\+M\+P section to create the threads even if it does not do anything and then place the call to P\+L\+A\+S\+M\+A\+\_\+\+Init. If your Open\+M\+P section is after the call to P\+L\+A\+S\+M\+A\+\_\+\+Finalize, it should not be a problem, since version 2.\+4.\+1 will unbind threads after this call.
+
+\subsection*{License Information }
+
+P\+L\+A\+S\+M\+A is a software package provided by University of Tennessee, University of California, Berkeley and University of Colorado, Denver. P\+L\+A\+S\+M\+A\textquotesingle{}s license is a B\+S\+D-\/style permissive free software license (properly called modified B\+S\+D). It allows proprietary commercial use, and for the software released under the license to be incorporated into proprietary commercial products. Works based on the material may be released under a proprietary license as long as P\+L\+A\+S\+M\+A\textquotesingle{}s license requirements are maintained, as stated in the L\+I\+C\+E\+N\+S\+E file, located in the main directory of the P\+L\+A\+S\+M\+A distribution. In contrast to copyleft licenses, like the G\+N\+U General Public License, P\+L\+A\+S\+M\+A\textquotesingle{}s license allows for copies and derivatives of the source code to be made available on terms more restrictive than those of the original license.
+
+\subsection*{Publications }
+
+A number of technical reports were written during the development of P\+L\+A\+S\+M\+A and published as \href{http://www.netlib.org/lapack/lawns/downloads/}{\tt http\+://www.\+netlib.\+org/lapack/lawns/downloads/}\mbox{[}L\+A\+P\+A\+C\+K Working Notes\mbox{]} by the University of Tennessee. Almost all of these reports later appeared as journal articles. To make a reference to P\+L\+A\+S\+M\+A you can cite the following publications\+:
+
+{\itshape Emmanuel Agullo, Alfredo Buttari, Jack Dongarra, Mathieu Faverge, Bilel Hadri, Azzam Haidar, Jakub Kurzak, Julien Langou, Hatem Ltaief, Piotr Luszczek, Asim Yar\+Khan} + \href{http://icl.cs.utk.edu/projectsfiles/plasma/pdf/users_guide.pdf}{\tt http\+://icl.\+cs.\+utk.\+edu/projectsfiles/plasma/pdf/users\+\_\+guide.\+pdf}\mbox{[}P\+L\+A\+S\+M\+A Users\textquotesingle{} Guide\mbox{]}$\ast$ + {\itshape Electrical Engineering and Computer Science Department} + {\itshape Univesity of Tennessee}
+
+{\itshape Alfredo Buttari, Julien Langou, Jakub Kurzak, Jack Dongarra} + A class of parallel tiled linear algebra algorithms for multicore architectures$\ast$ + {\itshape Parallel Computing 35 (2009) 38-\/53} + {\itshape \href{http://dx.doi.org/10.1016/j.parco.2008.10.002}{\tt http\+://dx.\+doi.\+org/10.\+1016/j.\+parco.\+2008.\+10.\+002}\mbox{[}D\+O\+I\+: 10.\+1016/j.parco.\+2008.\+10.\+002\mbox{]}}
+
+{\itshape Emmanuel Agullo, Jim Demmel, Jack Dongarra, Bilel Hadri, Jakub Kurzak, Julien Langou, Hatem Ltaief, Piotr Luszczek, Stanimire Tomov} + Numerical linear algebra on emerging architectures\+: The P\+L\+A\+S\+M\+A and M\+A\+G\+M\+A projects$\ast$ + {\itshape 2009 Journal of Physics\+: Conference Series 180 012037} + {\itshape \href{http://dx.doi.org/10.1088/1742-6596/180/1/012037}{\tt http\+://dx.\+doi.\+org/10.\+1088/1742-\/6596/180/1/012037}\mbox{[}D\+O\+I\+: 10.\+1088/1742-\/6596/180/1/012037\mbox{]}}
+
+\subsection*{Funding }
+
+The P\+L\+A\+S\+M\+A project is funded in part by the National Science Foundation, Department of Energy, Microsoft, and the Math\+Works. 
