@@ -36,19 +36,20 @@ showstringspaces=false
 \end{abstract}
 \section{Introduction}
 In this paper we demonstrate how a driver function of PLASMA~\cite{plasma01} scales.
-Therefor we decided to show this by the cholesky factorization, which is an important decomposition of symmetric positive definite matrices in the field of scientific computing.
+Therefor we decided to show this by the cholesky factorization, which is an important decomposition of symmetric positive definite matrices in the field of scientific computing.\\
 To achieve this we implemented PLASMA's \textit{DPOTRF} routine and measured the processing time of its execution on two, four, eight, sixteen, 32 and 48 cores. For time measuring we used the library PAPI~\cite{papi02}.\\
 All measurements were done on a system with an x86\_64 architecture, 48 CPUs, one thread per core, AMD Opteron\texttrademark{} Processor 6174 with a theoretical peak performance of 2200.00 MHz. Furthermore there are 8 NUMA nodes, which combine six cores per each node.
 Since it was not easy to found out how many instructions per cycle (IPC) this particular AMD processor can handle, we assumed that it is just as high as in similiar processors of AMD. In ~\cite{amd05} it says that the number of operations which the processor can handle in one cycle is four.
 In the end we compared PLASMA's \textit{DPOTRF} runtimes to the sequential cholesky decomposition implemented in LAPACK~\cite{lapack03} and calculated absolute and relative speedups.
 
 \section{Implementation}
-In order to build PLASMA we installed OpenBLAS~\cite{openblas04} and LAPACK~\cite{lapack03} from the latest stable releases.
+In order to build PLASMA we installed OpenBLAS~\cite{openblas04} and LAPACK from the latest stable releases.
 Since on our system is just one thread per core we built OpenBLAS single-threaded with \textit{MAKE USE\_THREAD=0}.
 To guarantee portability we decided to make a bash-script, which install every necessary library fully automatically and also auto-generate a Makefile, which compiles our \textit{main.c} programm.
 This is very useful, because anybody who is interested in this PLASMA scaling study can simply run this script with \textit{bash plasma\_lapack\_blas.sh}.
 After small adjustments of the generated template\_Makefile the user can compile the programm with \textit{make}.
 \\
+To execute the programm simply type into the terminal \textit{"./main n cores"} or \textit{"./main n l"} if you want to measure LAPACKs Cholesky Decomposition.\\ The parameter $n$ stands for the matrix size and $cores$ stands for the number of cores which are used for the computation.\\
 To verify a correct execution of the test programm we used valgrind -memcheck, which found no errors.\\
 Since the cholesky decomposition is only possible for symmetric positive definite we generated diagonale dominant matrices, because they are always positive definite.
 \begin{lstlisting}
@@ -101,8 +102,9 @@ int measure_PLASMA_dpotrf(double* A, double* L, double* work, PLASMA_enum uplo, 
 \ \\
 To verify correctness of PLASMAs and LAPACKs decompositions we calculated residuals.
 We used the one-norm. The closer the results are to zero the better they are.\\
+\ \\
 formular:
-\(\frac{||L*L^T-A||_1}{||A||_1}\)
+\(\frac{||L*L^T-A||_1}{||A||_1}\)\\
 
 
 \begin{lstlisting}
@@ -130,6 +132,8 @@ double residual(double* L, double* A, double* work, int n) {
 Since there is no function in PLASMA, LAPACK or BLAS which can compute a matrix multiplication with two triangular matrices as an input we had to set the upper entries of the matrix L to zero.\\
 In the beginning of our implementation we used here BLAS and LAPACK functions, because we don't measure execution time of the residual calculation. When testing we recognized that the residual computation takes a lot of time and so we replaced all functions with the related PLASMA ones.\\
 This resulted in a far quicker execution.
+\ \\
+For gathering output data we coded a python-script which hashed the data. This made further processing e.g. plotting a lot easier.
 
 \section{Evaluation}
 Because the measurement was done on a shared system
