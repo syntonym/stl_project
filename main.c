@@ -199,7 +199,7 @@ int main(int argc, char **argv)
 	double* A = calloc(n*n, sizeof(double));
 	double* B = calloc(n*n, sizeof(double));
 	double * work = malloc(n*n*sizeof(double));
-	PLASMA_enum uplo=PlasmaLower; //here: does not matter, as we store the full matrix
+	PLASMA_enum uplo=PlasmaLower;
 	generateMatrix(A, n);
 	cloneMatrix(A, B, n);
 
