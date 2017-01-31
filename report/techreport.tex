@@ -100,13 +100,11 @@ int measure_PLASMA_dpotrf(double* A, double* L, double* work, PLASMA_enum uplo, 
 	//these are just shortened code snippets
 }
 \end{lstlisting}
-\ \\
+
 To verify correctness of PLASMAs and LAPACKs decompositions we calculated residuals.
 We used the one-norm. The closer the results are to zero the better they are.\\
-\ \\
-formular:
-\(\frac{||L*L^T-A||_1}{||A||_1}\)\\
 
+\[\frac{||L*L^T-A||_1}{||A||_1}\]
 
 \begin{lstlisting}
 double residual(double* L, double* A, double* work, int n) {
@@ -134,7 +132,7 @@ Since there is no function in PLASMA, LAPACK or BLAS which can compute a matrix 
 In the beginning of our implementation we used here BLAS and LAPACK functions, because we don't measure execution time of the residual calculation. When testing we recognized that the residual computation takes a lot of time and so we replaced all functions with the related PLASMA ones.\\
 This resulted in a far quicker execution.\\
 \ \\
-For gathering output data we coded a python-script which hashes the data. This made further processing e.g.\ plotting a lot easier.
+For gathering output data we coded a python-script which encodes the data in JSON\@. This made further processing e.g.\ plotting a lot easier.
 \begin{flushright} Staudinger \end{flushright}
 
 \section{Evaluation}
@@ -243,8 +241,6 @@ although in that case GPUs were used.
 Generally this is a good result for the low additional work we need to integrate PLASMA.
 \begin{flushright} Haendeler \end{flushright} 
 %
-\ \\
-\ \\
 \ \\
 \ \\
 \bibliographystyle{plain} %Switches are plain,unsrt,abbrv,alpha.
