@@ -51,7 +51,7 @@ After small adjustments of the generated template\_Makefile the user can compile
 \\
 To execute the programm simply type into the terminal \textit{"./main n cores"} or \textit{"./main n l"} if you want to measure LAPACKs Cholesky Decomposition.\\ The parameter $n$ stands for the matrix size and $cores$ stands for the number of cores which are used for the computation.\\
 To verify a correct execution of the test programm we used valgrind -memcheck, which found no errors.\\
-Since the cholesky decomposition is only possible for symmetric positive definite we generated diagonale dominant matrices, because they are always positive definite.
+Since the cholesky decomposition is only possible for symmetric positive definite matrices we generated diagonale dominant ones, because they are always positive definite.
 \begin{lstlisting}
 void generateMatrix(double *A, int n) {
 
